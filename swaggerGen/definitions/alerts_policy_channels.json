@@ -1,0 +1,256 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No policy channel found with the given ID"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred while trying to update the policy channels"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint updates policy/channel associations.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#policy-channels-update\"\u003eupdating notification channels with policies\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Policy ID",
+              "name": "policy_id",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "List",
+              "description": "Channel IDs",
+              "name": "channel_ids",
+              "paramType": "query",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PolicyChannelsResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/alerts_policy_channels.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No policy channel found with the given ID"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred while trying to delete the policy channels"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint deletes Alerts policy/channel associations.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#policy-channels-delete\"\u003edeleting notification channels with policies\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Policy ID",
+              "name": "policy_id",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Channel ID",
+              "name": "channel_id",
+              "paramType": "query",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ChannelResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/alerts_policy_channels.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "Channel": {
+      "properties": {
+        "channel": {
+          "type": "ChannelBody"
+        }
+      }
+    },
+    "ChannelBody": {
+      "properties": {
+        "configuration": {
+          "desc": "Channel configuration",
+          "type": "hash",
+          "update": true
+        },
+        "name": {
+          "desc": "Name of channel",
+          "type": "string",
+          "update": true
+        },
+        "type": {
+          "desc": "Type of channel",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "ChannelLinksResponse": {
+      "properties": {
+        "policy_ids": {
+          "desc": "Policies associated with this channel",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "ChannelResponse": {
+      "properties": {
+        "channel": {
+          "type": "ChannelResponseType"
+        }
+      }
+    },
+    "ChannelResponseType": {
+      "properties": {
+        "configuration": {
+          "desc": "Channel configuration",
+          "type": "hash",
+          "update": true
+        },
+        "id": {
+          "desc": "Channel unique identifier",
+          "type": "integer"
+        },
+        "links": {
+          "type": "ChannelLinksResponse"
+        },
+        "name": {
+          "desc": "Name of channel",
+          "type": "string",
+          "update": true
+        },
+        "type": {
+          "desc": "Type of channel",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "PolicyChannels": {
+      "properties": {
+        "policy": {
+          "type": "PolicyChannelsBody"
+        }
+      }
+    },
+    "PolicyChannelsBody": {
+      "properties": {
+        "channel_ids": {
+          "desc": "Array of channel ids",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "id": {
+          "desc": "Alert policy unique identifier",
+          "type": "integer",
+          "update": true
+        }
+      }
+    },
+    "PolicyChannelsResponse": {
+      "properties": {
+        "policy": {
+          "type": "PolicyChannelsResponseType"
+        }
+      }
+    },
+    "PolicyChannelsResponseType": {
+      "properties": {
+        "channel_ids": {
+          "desc": "Array of channel ids",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "id": {
+          "desc": "Alert policy unique identifier",
+          "type": "integer",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThis API endpoint modifies Alerts policy/channel associations.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

@@ -1,0 +1,234 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003epaginated\u003c/a\u003e \nlist of the key transactions associated with your New Relic account.  The time range for summary data is the last 10 minutes.\u003c/p\u003e\n\n\u003cp\u003eKey transactions can be filtered by their name or list of IDs.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion of \n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Filter by name",
+              "name": "filter[name]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "List",
+              "description": "Filter by policy IDs",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "KeyTransactionResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/key_transactions.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No key transaction found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis endpoint returns a single key transaction, identified by ID. The time range for summary data is the last 10 minutes.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion of \n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Key transaction ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "KeyTransactionResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/key_transactions/{id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "AppSummaryResponse": {
+      "properties": {
+        "apdex_score": {
+          "desc": "Application Apdex score in the last 5 minutes",
+          "type": "float"
+        },
+        "apdex_target": {
+          "desc": "Application Apdex target time",
+          "type": "float"
+        },
+        "concurrent_instance_count": {
+          "desc": "Number of concurrent application instances for background applications",
+          "type": "integer"
+        },
+        "error_rate": {
+          "desc": "Application error rate in the last 5 minutes",
+          "type": "float"
+        },
+        "host_count": {
+          "desc": "Number of application hosts",
+          "type": "integer"
+        },
+        "instance_count": {
+          "desc": "Number of application instances",
+          "type": "integer"
+        },
+        "response_time": {
+          "desc": "Application average response time",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "Application throughput in the last 5 minutes",
+          "type": "float"
+        }
+      }
+    },
+    "EndUserSummaryResponse": {
+      "properties": {
+        "apdex_score": {
+          "desc": "End user Apdex score in the last 5 minutes",
+          "type": "float"
+        },
+        "apdex_target": {
+          "desc": "End user Apdex target time",
+          "type": "float"
+        },
+        "response_time": {
+          "desc": "End user average response time (ms)",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "End user throughput in the last 5 minutes",
+          "type": "float"
+        }
+      }
+    },
+    "KeyTransactionLinksResponse": {
+      "properties": {
+        "application": {
+          "description": "Application from which this key transaction originated",
+          "type": "integer"
+        }
+      }
+    },
+    "KeyTransactionResponse": {
+      "properties": {
+        "key_transaction": {
+          "type": "KeyTransactionResponseType"
+        }
+      }
+    },
+    "KeyTransactionResponseType": {
+      "properties": {
+        "application_summary": {
+          "type": "AppSummaryResponse"
+        },
+        "end_user_summary": {
+          "type": "EndUserSummaryResponse"
+        },
+        "health_status": {
+          "desc": "Key transaction health_status",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Key transaction unique identifier",
+          "type": "integer"
+        },
+        "last_reported_at": {
+          "desc": "The last time the key transaction reported data (accurate to within a few minutes)",
+          "type": "time"
+        },
+        "links": {
+          "type": "KeyTransactionLinksResponse"
+        },
+        "name": {
+          "desc": "Key transaction name",
+          "type": "string"
+        },
+        "reporting": {
+          "desc": "Whether key transaction has reported data in the last 10 minutes",
+          "type": "boolean"
+        },
+        "transaction_name": {
+          "desc": "The web transaction name",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe key transactions resource provides general information about key transactions monitored by New Relic, including\nresponse time, apdex, and throughput. It allows for querying and filtering on multiple parameters as well as\nretrieving information for a single key transaction.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

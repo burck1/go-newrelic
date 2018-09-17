@@ -1,0 +1,444 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of the Mobile Applications associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eMobileApplications can be filtered by their name, or by the application IDs.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MobileApplicationResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/mobile_applications.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Mobile Application found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single Mobile Application, identified by ID. The time range for summary data is the last 30 minutes.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Mobile Application ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MobileApplicationResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/mobile_applications/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "metric_names",
+          "notes": "\u003cp\u003eReturn a list of known metrics and their value names for the given resource.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion\non \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e\nand for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Mobile application ID",
+              "name": "mobile_application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Filter metrics by name",
+              "name": "name",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index (will be deprecated)",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Cursor for next page (replacing page param)",
+              "name": "cursor",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricParserResponse",
+          "summary": "Metric Names"
+        }
+      ],
+      "path": "/v2/mobile_applications/{mobile_application_id}/metrics.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "metric_data",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of values for each of the requested metrics. The list of available metrics\ncan be returned using the Metric Name API endpoint.\u003c/p\u003e\n\n\u003cp\u003eMetric data can be filtered by a number of parameters, including multiple names and values, and by time range.\nMetric names and values will be matched intelligently in the background.\u003c/p\u003e\n\n\u003cp\u003eYou can also retrieve a summarized data point across the entire time range selected by using the summarize\nparameter.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e, \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/extracting-metric-data\" target=\"_blank\"\u003e time range\u003c/a\u003e \nrelated considerations, and for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Mobile application ID",
+              "name": "mobile_application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metrics by name",
+              "name": "names",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metric values",
+              "name": "values",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics after this time",
+              "name": "from",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics before this time",
+              "name": "to",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Period of timeslices in seconds",
+              "name": "period",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Summarize the data",
+              "name": "summarize",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Return unformatted raw values",
+              "name": "raw",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricDataResponse",
+          "summary": "Metric Data"
+        }
+      ],
+      "path": "/v2/mobile_applications/{mobile_application_id}/metrics/data.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "CrashSummaryResponse": {
+      "properties": {
+        "crash_count": {
+          "desc": "Count of all crash occurrences (both resolved and unresolved)",
+          "type": "integer"
+        },
+        "crash_rate": {
+          "desc": "Percentage of sessions that ended in a crash",
+          "type": "float"
+        },
+        "supports_crash_data": {
+          "desc": "Whether newest agent version seen supports crash reporting",
+          "type": "boolean"
+        },
+        "unresolved_crash_count": {
+          "desc": "Count of unresolved crash occurrences",
+          "type": "integer"
+        }
+      }
+    },
+    "MetricDataResponse": {
+      "properties": {
+        "metric_data": {
+          "type": "MetricDataResponseType"
+        }
+      }
+    },
+    "MetricDataResponseType": {
+      "properties": {
+        "from": {
+          "desc": "Find metric data that was collected after this time.",
+          "type": "time"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "MetricResponse"
+          },
+          "type": "array"
+        },
+        "metrics_found": {
+          "desc": "Requested metrics found for this time period.",
+          "type": "string"
+        },
+        "metrics_not_found": {
+          "desc": "Metrics that were requested but not found for this time period.",
+          "type": "string"
+        },
+        "to": {
+          "desc": "Find metric data that was collected before this time.",
+          "type": "time"
+        }
+      }
+    },
+    "MetricParserResponse": {
+      "properties": {
+        "metric": {
+          "type": "MetricParserResponseType"
+        }
+      }
+    },
+    "MetricParserResponseType": {
+      "properties": {
+        "name": {
+          "desc": "Name of metric collected",
+          "type": "string"
+        },
+        "values": {
+          "desc": "The name of metric values available",
+          "items": {
+            "$ref": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MetricResponse": {
+      "properties": {
+        "name": {
+          "desc": "Name of the metric.",
+          "type": "string"
+        },
+        "timeslices": {
+          "items": {
+            "$ref": "TimesliceResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MobileApplicationResponse": {
+      "properties": {
+        "application": {
+          "type": "MobileApplicationResponseType"
+        }
+      }
+    },
+    "MobileApplicationResponseType": {
+      "properties": {
+        "crash_summary": {
+          "type": "CrashSummaryResponse"
+        },
+        "health_status": {
+          "desc": "Application code status",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Application unique identifier",
+          "type": "integer"
+        },
+        "mobile_summary": {
+          "type": "MobileSummaryDataResponse"
+        },
+        "name": {
+          "desc": "Application name",
+          "type": "string"
+        },
+        "reporting": {
+          "desc": "Whether application has ever reported data",
+          "type": "boolean"
+        }
+      }
+    },
+    "MobileSummaryDataResponse": {
+      "properties": {
+        "active_users": {
+          "desc": "Max traffic in the last 30 minutes",
+          "type": "integer"
+        },
+        "calls_per_session": {
+          "desc": "Http throughput in the last 30 minutes",
+          "type": "float"
+        },
+        "failed_call_rate": {
+          "desc": "Percentage of http errors in the last 30 minutes",
+          "type": "float"
+        },
+        "interaction_time": {
+          "desc": "Interaction speed in the last 30 minutes",
+          "type": "float"
+        },
+        "launch_count": {
+          "desc": "Total app launches in the last 30 minutes",
+          "type": "integer"
+        },
+        "remote_error_rate": {
+          "desc": "Percentage of network failures in the last 30 minutes",
+          "type": "float"
+        },
+        "response_time": {
+          "desc": "Http response time in the last 30 minutes",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "Http requests in the last 30 minutes ",
+          "type": "float"
+        }
+      }
+    },
+    "TimesliceResponse": {
+      "properties": {
+        "from": {
+          "desc": "Find data that was collected after this time.",
+          "type": "time"
+        },
+        "to": {
+          "desc": "Find data that was collected before this time.",
+          "type": "time"
+        },
+        "values": {
+          "desc": "List of values to return for each data point.",
+          "type": "hash"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe mobile applications resource provides general information about mobile applications monitored by New Relic, including\nactive users, interaction time, crash rate, and http error rate. It allows for listing app mobile applications,\nas well as retrieving information for a single mobile application.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

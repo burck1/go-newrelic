@@ -1,0 +1,298 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of the Plugins associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003ePlugins can be filtered by their guid or the list of plugin IDs.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Filter plugin by guid",
+              "name": "filter[guid]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "List",
+              "description": "Filter plugin by ids",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Include all data about a plugin",
+              "name": "detailed",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PluginResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/plugins.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Plugin found with given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single plugin, identified by its ID.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Plugin ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Include all data about a plugin",
+              "name": "detailed",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PluginResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/plugins/{id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "PluginDetailsResponse": {
+      "properties": {
+        "branding_image_url": {
+          "desc": "Url pointing to the branding image",
+          "type": "string"
+        },
+        "created_at": {
+          "desc": "When the plugin was created",
+          "type": "time"
+        },
+        "description": {
+          "desc": "Description of the plugin",
+          "type": "integer"
+        },
+        "download_url": {
+          "desc": "Url where the plugin can be downloaded",
+          "type": "string"
+        },
+        "first_edited_at": {
+          "desc": "The first time the plugin was edited",
+          "type": "time"
+        },
+        "first_published_at": {
+          "desc": "The first time the plugin was published",
+          "type": "time"
+        },
+        "has_unpublished_changes": {
+          "desc": "Whether or not the plugin has unpublished changes",
+          "type": "boolean"
+        },
+        "is_public": {
+          "desc": "Whether or not the plugin is publicly viewable",
+          "type": "string"
+        },
+        "last_edited_at": {
+          "desc": "The last time the plugin was edited",
+          "type": "time"
+        },
+        "last_published_at": {
+          "desc": "The last time the plugin was published",
+          "type": "time"
+        },
+        "published_version": {
+          "desc": "The version of the plugin that is installed",
+          "type": "string"
+        },
+        "publisher_about_url": {
+          "desc": "Url pointing to information about the plugin publisher",
+          "type": "string"
+        },
+        "publisher_support_url": {
+          "desc": "Url pointing to support information",
+          "type": "string"
+        },
+        "short_name": {
+          "desc": "The name that is displayed in the navigation bar",
+          "type": "string"
+        },
+        "updated_at": {
+          "desc": "When the plugin was updated",
+          "type": "time"
+        },
+        "upgraded_at": {
+          "desc": "The last time the plugin was upgraded",
+          "type": "time"
+        }
+      }
+    },
+    "PluginResponse": {
+      "properties": {
+        "plugin": {
+          "type": "PluginResponseType"
+        }
+      }
+    },
+    "PluginResponseType": {
+      "properties": {
+        "component_agent_count": {
+          "desc": "Number of component agents",
+          "type": "integer"
+        },
+        "details": {
+          "type": "PluginDetailsResponse"
+        },
+        "guid": {
+          "desc": "Plugin guid",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Plugin unique identifier",
+          "type": "integer"
+        },
+        "name": {
+          "desc": "Plugin name",
+          "type": "string"
+        },
+        "publisher": {
+          "desc": "Publisher name",
+          "type": "string"
+        },
+        "summary_metrics": {
+          "items": {
+            "$ref": "SummaryMetricResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "SummaryMetricResponse": {
+      "properties": {
+        "id": {
+          "desc": "Summary metric unique identifier",
+          "type": "integer"
+        },
+        "metric": {
+          "desc": "Metric that the summary metric is based on",
+          "type": "string"
+        },
+        "name": {
+          "desc": "Summary metric name",
+          "type": "string"
+        },
+        "thresholds": {
+          "type": "SummaryMetricThresholdResponse"
+        },
+        "value_function": {
+          "desc": "The function that is applied to the metric",
+          "type": "string"
+        },
+        "values": {
+          "type": "SummaryMetricValuesResponse"
+        }
+      }
+    },
+    "SummaryMetricThresholdResponse": {
+      "properties": {
+        "caution": {
+          "desc": "Threshold for a caution alert",
+          "type": "float"
+        },
+        "critical": {
+          "desc": "Threshold for a critical alert",
+          "type": "float"
+        }
+      }
+    },
+    "SummaryMetricValuesResponse": {
+      "properties": {
+        "formatted": {
+          "desc": "Summary metric name",
+          "type": "string"
+        },
+        "raw": {
+          "desc": "Summary metric unique identifier",
+          "type": "float"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe plugins resource provides general information about New Relic Platform plugins, including guid,\nname, publisher and summary metrics. It allows for querying and filtering on multiple parameters\nas well as retrieving information for a single plugin.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

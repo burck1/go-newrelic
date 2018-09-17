@@ -1,0 +1,854 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003epaginated\u003c/a\u003e\nlist of the Applications associated with your New Relic account. The time range for summary data is the last 3-4 minutes.\u003c/p\u003e\n\n\u003cp\u003eApplications can be filtered by their name, hosts, the list of application IDs or the application language as\nreported by the agents.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion and examples of\nusing \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/list-application-specific-server-host-instance-ids\" target=\"_blank\"\u003e filters \u003c/a\u003e\nand \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Filter by application name",
+              "name": "filter[name]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by application host",
+              "name": "filter[host]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "List",
+              "description": "Filter by application ids",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by application language",
+              "name": "filter[language]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Exclude links section from the response",
+              "name": "exclude_links",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ApplicationResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/applications.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Application found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single Application, identified by ID. The time range for summary data is the last 3-4 minutes.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion of the\n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003e summary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ApplicationResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/applications/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred when updating the application"
+            },
+            {
+              "code": 404,
+              "reason": "No Application found with the given ID"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint allows you to update certain parameters of your application.\u003c/p\u003e\n\n\u003cp\u003eThe input is expected to be in \u003cstrong\u003eJSON or XML\u003c/strong\u003e format in the body parameter of the PUT request. The exact\nschema is defined below. Any extra parameters passed in the body \u003cstrong\u003ewill be ignored\u003c/strong\u003e.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion and simple example of\n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/changing-alias-your-application-v2\" target=\"_blank\"\u003e updating\u003c/a\u003e\nan application.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Application",
+              "description": "Application schema",
+              "name": "application",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ApplicationResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/applications/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Application found with the given ID"
+            },
+            {
+              "code": 409,
+              "reason": "Cannot delete an application that is still reporting data."
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint deletes an application and all of its reported data.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eWARNING\u003c/strong\u003e: Only applications that have stopped reporting can be deleted. This is an irreversible process\nwhich will delete all reported data for this application.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ApplicationResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/applications/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "metric_names",
+          "notes": "\u003cp\u003eReturn a list of known metrics and their value names for the given resource.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion\non \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e\nand for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Filter metrics by name",
+              "name": "name",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index (will be deprecated)",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Cursor for next page (replacing page param)",
+              "name": "cursor",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricParserResponse",
+          "summary": "Metric Names"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/metrics.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "metric_data",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of values for each of the requested metrics. The list of available metrics\ncan be returned using the Metric Name API endpoint.\u003c/p\u003e\n\n\u003cp\u003eMetric data can be filtered by a number of parameters, including multiple names and values, and by time range.\nMetric names and values will be matched intelligently in the background.\u003c/p\u003e\n\n\u003cp\u003eYou can also retrieve a summarized data point across the entire time range selected by using the summarize\nparameter.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e, \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/extracting-metric-data\" target=\"_blank\"\u003e time range\u003c/a\u003e \nrelated considerations, and for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metrics by name",
+              "name": "names",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metric values",
+              "name": "values",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics after this time",
+              "name": "from",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics before this time",
+              "name": "to",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Period of timeslices in seconds",
+              "name": "period",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Summarize the data",
+              "name": "summarize",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Return unformatted raw values",
+              "name": "raw",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricDataResponse",
+          "summary": "Metric Data"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/metrics/data.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "AppSettingsBody": {
+      "properties": {
+        "app_apdex_threshold": {
+          "desc": "Application Apdex threshold",
+          "type": "float",
+          "update": true
+        },
+        "enable_real_user_monitoring": {
+          "desc": "Whether end user monitoring is enabled",
+          "type": "boolean",
+          "update": true
+        },
+        "end_user_apdex_threshold": {
+          "desc": "End user Apdex threshold",
+          "type": "float",
+          "update": true
+        }
+      }
+    },
+    "AppSettingsResponse": {
+      "properties": {
+        "app_apdex_threshold": {
+          "desc": "Application Apdex threshold",
+          "type": "float",
+          "update": true
+        },
+        "enable_real_user_monitoring": {
+          "desc": "Whether end user monitoring is enabled",
+          "type": "boolean",
+          "update": true
+        },
+        "end_user_apdex_threshold": {
+          "desc": "End user Apdex threshold",
+          "type": "float",
+          "update": true
+        },
+        "use_server_side_config": {
+          "desc": "Whether configurations are server-side or at newrelic.com",
+          "type": "boolean"
+        }
+      }
+    },
+    "AppSummaryResponse": {
+      "properties": {
+        "apdex_score": {
+          "desc": "Application Apdex score in the last 5 minutes",
+          "type": "float"
+        },
+        "apdex_target": {
+          "desc": "Application Apdex target time",
+          "type": "float"
+        },
+        "concurrent_instance_count": {
+          "desc": "Number of concurrent application instances for background applications",
+          "type": "integer"
+        },
+        "error_rate": {
+          "desc": "Application error rate in the last 5 minutes",
+          "type": "float"
+        },
+        "host_count": {
+          "desc": "Number of application hosts",
+          "type": "integer"
+        },
+        "instance_count": {
+          "desc": "Number of application instances",
+          "type": "integer"
+        },
+        "response_time": {
+          "desc": "Application average response time",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "Application throughput in the last 5 minutes",
+          "type": "float"
+        }
+      }
+    },
+    "Application": {
+      "properties": {
+        "application": {
+          "type": "ApplicationBody"
+        }
+      }
+    },
+    "ApplicationBody": {
+      "properties": {
+        "name": {
+          "desc": "Application name",
+          "type": "string",
+          "update": true
+        },
+        "settings": {
+          "type": "AppSettingsBody"
+        }
+      }
+    },
+    "ApplicationLinksResponse": {
+      "properties": {
+        "alert_policy": {
+          "desc": "Alert policy in which this application is a member",
+          "type": "integer"
+        },
+        "application_hosts": {
+          "desc": "List of application hosts",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        },
+        "application_instances": {
+          "desc": "List of application instances",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        },
+        "servers": {
+          "desc": "List of servers associated with this application",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "ApplicationResponse": {
+      "properties": {
+        "application": {
+          "type": "ApplicationResponseType"
+        }
+      }
+    },
+    "ApplicationResponseType": {
+      "properties": {
+        "application_summary": {
+          "type": "AppSummaryResponse"
+        },
+        "end_user_summary": {
+          "type": "EndUserSummaryResponse"
+        },
+        "health_status": {
+          "desc": "Application code status",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Application unique identifier",
+          "type": "integer"
+        },
+        "language": {
+          "desc": "Application language as reported by agents",
+          "type": "string"
+        },
+        "last_reported_at": {
+          "desc": "The last time the application reported data (accurate to within a few minutes)",
+          "type": "time"
+        },
+        "links": {
+          "type": "ApplicationLinksResponse"
+        },
+        "name": {
+          "desc": "Application name",
+          "type": "string",
+          "update": true
+        },
+        "reporting": {
+          "desc": "Whether application has reported data in the last 10 minutes",
+          "type": "boolean"
+        },
+        "settings": {
+          "type": "AppSettingsResponse"
+        }
+      }
+    },
+    "EndUserSummaryResponse": {
+      "properties": {
+        "apdex_score": {
+          "desc": "End user Apdex score in the last 5 minutes",
+          "type": "float"
+        },
+        "apdex_target": {
+          "desc": "End user Apdex target time",
+          "type": "float"
+        },
+        "response_time": {
+          "desc": "End user average response time (ms)",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "End user throughput in the last 5 minutes",
+          "type": "float"
+        }
+      }
+    },
+    "Event": {
+      "properties": {
+        "event": {
+          "type": "EventBody"
+        }
+      }
+    },
+    "EventBody": {
+      "properties": {
+        "closed_at": {
+          "desc": "Closed at",
+          "type": "datetime",
+          "update": true
+        },
+        "created_at": {
+          "desc": "Created at",
+          "type": "datetime",
+          "update": true
+        },
+        "level": {
+          "desc": "Severity level: {\"unknown\"=\u003e-1, \"ok\"=\u003e0, \"info\"=\u003e1, \"warning\"=\u003e2, \"error\"=\u003e3, \"downtime\"=\u003e4}",
+          "type": "string",
+          "update": true
+        },
+        "message": {
+          "desc": "Description",
+          "type": "string",
+          "update": true
+        },
+        "payload": {
+          "desc": "JSON payload",
+          "type": "hash",
+          "update": true
+        },
+        "type": {
+          "desc": "Event type: event,problem,note,settings_changed,application_apdex_problem,application_error_rate_problem,application_throughput_problem,application_downtime,browser_apdex_problem,server_cpu_problem,server_disk_io_problem,server_disk_usage_problem,server_memory_problem,metric_problem,server_not_reporting_problem,custom_event,custom_metric_problem,custom_problem,mobile_failed_call_rate_problem,mobile_response_time_problem,mobile_status_code_error_rate_problem",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "EventLinksResponse": {
+      "properties": {
+        "downtime": {
+          "desc": "Downtime event",
+          "type": "integer"
+        },
+        "incidents": {
+          "desc": "Event incidents",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "EventResponse": {
+      "properties": {
+        "event": {
+          "type": "EventResponseType"
+        }
+      }
+    },
+    "EventResponseType": {
+      "properties": {
+        "closed_at": {
+          "desc": "Closed at",
+          "type": "datetime",
+          "update": true
+        },
+        "created_at": {
+          "desc": "Created at",
+          "type": "datetime",
+          "update": true
+        },
+        "id": {
+          "desc": "Event unique identifier",
+          "type": "integer"
+        },
+        "level": {
+          "desc": "Severity level: {\"unknown\"=\u003e-1, \"ok\"=\u003e0, \"info\"=\u003e1, \"warning\"=\u003e2, \"error\"=\u003e3, \"downtime\"=\u003e4}",
+          "type": "string",
+          "update": true
+        },
+        "links": {
+          "type": "EventLinksResponse"
+        },
+        "message": {
+          "desc": "Description",
+          "type": "string",
+          "update": true
+        },
+        "payload": {
+          "desc": "JSON payload",
+          "type": "hash",
+          "update": true
+        },
+        "type": {
+          "desc": "Event type: event,problem,note,settings_changed,application_apdex_problem,application_error_rate_problem,application_throughput_problem,application_downtime,browser_apdex_problem,server_cpu_problem,server_disk_io_problem,server_disk_usage_problem,server_memory_problem,metric_problem,server_not_reporting_problem,custom_event,custom_metric_problem,custom_problem,mobile_failed_call_rate_problem,mobile_response_time_problem,mobile_status_code_error_rate_problem",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "MetricDataResponse": {
+      "properties": {
+        "metric_data": {
+          "type": "MetricDataResponseType"
+        }
+      }
+    },
+    "MetricDataResponseType": {
+      "properties": {
+        "from": {
+          "desc": "Find metric data that was collected after this time.",
+          "type": "time"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "MetricResponse"
+          },
+          "type": "array"
+        },
+        "metrics_found": {
+          "desc": "Requested metrics found for this time period.",
+          "type": "string"
+        },
+        "metrics_not_found": {
+          "desc": "Metrics that were requested but not found for this time period.",
+          "type": "string"
+        },
+        "to": {
+          "desc": "Find metric data that was collected before this time.",
+          "type": "time"
+        }
+      }
+    },
+    "MetricParserResponse": {
+      "properties": {
+        "metric": {
+          "type": "MetricParserResponseType"
+        }
+      }
+    },
+    "MetricParserResponseType": {
+      "properties": {
+        "name": {
+          "desc": "Name of metric collected",
+          "type": "string"
+        },
+        "values": {
+          "desc": "The name of metric values available",
+          "items": {
+            "$ref": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MetricResponse": {
+      "properties": {
+        "name": {
+          "desc": "Name of the metric.",
+          "type": "string"
+        },
+        "timeslices": {
+          "items": {
+            "$ref": "TimesliceResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "TargetDowntimeEventResponse": {
+      "properties": {
+        "downtime": {
+          "type": "TargetDowntimeEventResponseType"
+        }
+      }
+    },
+    "TargetDowntimeEventResponseType": {
+      "properties": {
+        "duration": {
+          "desc": "Duration in seconds",
+          "type": "integer"
+        },
+        "id": {
+          "desc": "Downtime unique identifier",
+          "type": "integer"
+        },
+        "ip_address": {
+          "desc": "Ping target IP address",
+          "type": "string"
+        },
+        "last_failure": {
+          "desc": "Last failure",
+          "type": "datetime"
+        },
+        "number_of_failures": {
+          "desc": "Number of ping failures",
+          "type": "integer"
+        },
+        "opened_at": {
+          "desc": "Created at",
+          "type": "datetime"
+        },
+        "url": {
+          "desc": "Ping url for this downtime event",
+          "type": "string"
+        }
+      }
+    },
+    "TimesliceResponse": {
+      "properties": {
+        "from": {
+          "desc": "Find data that was collected after this time.",
+          "type": "time"
+        },
+        "to": {
+          "desc": "Find data that was collected before this time.",
+          "type": "time"
+        },
+        "values": {
+          "desc": "List of values to return for each data point.",
+          "type": "hash"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe applications resource provides general information about applications monitored by New Relic, including\nresponse time, apdex, throughput and settings. It allows for querying and filtering on multiple parameters\nas well as retrieving information for a single application.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

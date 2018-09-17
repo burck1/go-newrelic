@@ -1,0 +1,360 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 400,
+              "reason": "Provided page number is not 1 or higher"
+            },
+            {
+              "code": 503,
+              "reason": "Service unavailable"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint allows you to fetch a paginated and sorted list\nof Insights dashboards. Dashboards can be filtered by title, owner\nemail, category, created date, and updated date. This endpoint will\nnot return widget metadata.\u003c/p\u003e\n\n\u003cp\u003eFor more information, see \u003ca href=\"https://docs.newrelic.com/docs/insights-dashboard-api\"\u003eDashboard API documentation\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Contains title",
+              "name": "filter[title]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Contains owner email",
+              "name": "filter[owner_email]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Category is one of ('all' | 'favorite' | 'mine')",
+              "name": "filter[category]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Created before given date",
+              "name": "filter[created_before]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Created after given date",
+              "name": "filter[created_after]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Updated before given date",
+              "name": "filter[updated_before]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Updated after given date",
+              "name": "filter[updated_after]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Sort is one of ('name' | 'recently viewed' | 'last edited')",
+              "name": "sort",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Number of items per page",
+              "name": "per_page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/dashboards.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "Dashboard does not exist or is inaccessible"
+            },
+            {
+              "code": 503,
+              "reason": "Service unavailable"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint allows you to view an existing dashboard and widget\nmetadata for a specific dashboard ID. If a widget contains data from\nan account that the user does not have access to, the widget will\nbe returned as an “inaccessible” visualization type.\u003c/p\u003e\n\n\u003cp\u003eFor more information, see \u003ca href=\"https://docs.newrelic.com/docs/insights-dashboard-api\"\u003eDashboard API documentation\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Dashboard ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/dashboards/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 400,
+              "reason": "Dashboard payload failed validation"
+            },
+            {
+              "code": 503,
+              "reason": "Service unavailable"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint allows you to create a new Insights dashboard in the account that your API key has access to.\u003c/p\u003e\n\n\u003cp\u003eFor more information, see \u003ca href=\"https://docs.newrelic.com/docs/insights-dashboard-api\"\u003eDashboard API documentation\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Dashboard",
+              "description": "Dashboard schema",
+              "name": "dashboard",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/dashboards.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 400,
+              "reason": "Dashboard payload failed validation"
+            },
+            {
+              "code": 404,
+              "reason": "Dashboard does not exist or is inaccessible"
+            },
+            {
+              "code": 503,
+              "reason": "Service unavailable"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint allows you to update any existing Insights dashboard that you have permission to modify within the account that your API key has access to.\u003c/p\u003e\n\n\u003cp\u003eFor more information, see \u003ca href=\"https://docs.newrelic.com/docs/insights-dashboard-api\"\u003eDashboard API documentation\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Dashboard ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Dashboard",
+              "description": "Dashboard schema",
+              "name": "dashboard",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/dashboards/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "Dashboard does not exist or is inaccessible"
+            },
+            {
+              "code": 503,
+              "reason": "Service unavailable"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint allows you to delete any Insights dashboard in the account that your API key has access to.\u003c/p\u003e\n\n\u003cp\u003eFor more, see the \u003ca href=\"https://docs.newrelic.com/docs/insights-dashboard-api\"\u003eDashboard API documentation\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Dashboard ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/dashboards/{id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {},
+  "notes": "\u003cp\u003eThe dashboard resource allows for creating, reading, updating and deleting new or existing Insights dashboards.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

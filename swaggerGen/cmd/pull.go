@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -51,17 +52,66 @@ func pullLatestSwaggerDocs(cmd *cobra.Command, args []string) error {
 
 	client := initClient()
 
-	if err := downloadJSONFile(client, apiRoot+definitions, definitionsPath, raw); err != nil {
+	url := apiRoot + definitions
+	if err := downloadJSONFile(client, url, definitionsPath, raw); err != nil {
 		return err
 	}
+	log.Printf("GET %s\n", url)
 
 	data, err := readJSONObjectFile(definitionsPath)
 	if err != nil {
 		return err
 	}
 
-	// TODO: read data["apis"][*].path and download the rest of the jsons
-	log.Println(data["basePath"].(string))
+	apis, err := getApis(data)
+	if err != nil {
+		return err
+	}
+
+	paths := make([]string, len(apis), len(apis))
+	for i, api := range apis {
+		paths[i], err = getPath(i, api)
+		if err != nil {
+			return err
+		}
+	}
+
+	// fetch all the files in parallel
+	// create some channels so we can wait on the responses
+	successc, errc := make(chan string), make(chan error)
+	for _, path := range paths {
+		go func(path string) {
+			url := getURLFromPath(path)
+			filename, err := getFilenameFromURL(url)
+			if err != nil {
+				errc <- err
+				return
+			}
+			filePath := filepath.Join(rootPath, filename)
+			if err := downloadJSONFile(client, url, filePath, raw); err != nil {
+				errc <- err
+				return
+			}
+			successc <- url
+		}(path)
+	}
+
+	// wait for all the downloads to complete
+	// collect the errors for later
+	var errs []error
+	for i := 0; i < len(paths); i++ {
+		select {
+		case url := <-successc:
+			log.Printf("GET %s\n", url)
+		case err := <-errc:
+			errs = append(errs, err)
+		}
+	}
+
+	if len(errs) > 0 {
+		// just return the first error
+		return errs[0]
+	}
 
 	// log.Println("End pull")
 
@@ -121,6 +171,51 @@ func readFileBytes(path string) ([]byte, error) {
 	}
 
 	return fileBytes, nil
+}
+
+func getURLFromPath(path string) string {
+	return apiRoot + strings.Replace(path, "{format}", "json", 1)
+}
+
+func getFilenameFromURL(url string) (string, error) {
+	i := strings.LastIndex(url, "/")
+	if i == -1 {
+		return "", &pathError{url}
+	}
+	return url[i+1:], nil
+}
+
+func getApis(data map[string]interface{}) ([]interface{}, error) {
+	apis, ok := data["apis"]
+	if !ok {
+		return nil, &swaggerJSONError{"$.apis", "not found"}
+	}
+
+	apisArray, ok := apis.([]interface{})
+	if !ok {
+		return nil, &swaggerJSONError{"$.apis", "is an unexpected type"}
+	}
+
+	return apisArray, nil
+}
+
+func getPath(i int, api interface{}) (string, error) {
+	apiObj, ok := api.(map[string]interface{})
+	if !ok {
+		return "", &swaggerJSONError{fmt.Sprintf("$.apis[%d]", i), "is an unexpected type"}
+	}
+
+	path, ok := apiObj["path"]
+	if !ok {
+		return "", &swaggerJSONError{fmt.Sprintf("$.apis[%d].path", i), "not found"}
+	}
+
+	pathStr, ok := path.(string)
+	if !ok {
+		return "", &swaggerJSONError{fmt.Sprintf("$.apis[%d].path", i), "is an unexpected type"}
+	}
+
+	return pathStr, nil
 }
 
 func initPath() (string, error) {
@@ -271,4 +366,21 @@ func doForRetry(client http.Client, request *http.Request) (*http.Response, bool
 
 type stop struct {
 	error
+}
+
+type swaggerJSONError struct {
+	jsonPath string
+	message  string
+}
+
+func (e *swaggerJSONError) Error() string {
+	return fmt.Sprintf("%s %s in the swagger json", e.jsonPath, e.message)
+}
+
+type pathError struct {
+	path string
+}
+
+func (e *pathError) Error() string {
+	return fmt.Sprintf("%s is invalid", e.path)
 }
