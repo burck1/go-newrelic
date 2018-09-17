@@ -9,3 +9,5 @@ import:
   version: ^0.1.0
 - package: gopkg.in/resty.v0
   version: ^0.11.0
+- package: github.com/mitchellh/go-homedir
+  version: ^1.0.0
