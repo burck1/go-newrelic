@@ -15,6 +15,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const apiRoot = "https://api.newrelic.com"
+const definitions = "/v2/definitions.json"
+
 var pullCmd = &cobra.Command{
 	Use:   "pull",
 	Short: "Pull the latest swagger files from New Relic",
@@ -44,9 +47,29 @@ func pullLatestSwaggerDocs(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	definitionsPath := filepath.Join(rootPath, "definitions.json")
 
 	client := initClient()
-	request, err := initRequest("GET", "https://api.newrelic.com/v2/definitions.json", nil)
+
+	if err := downloadJSONFile(client, apiRoot+definitions, definitionsPath, raw); err != nil {
+		return err
+	}
+
+	data, err := readJSONObjectFile(definitionsPath)
+	if err != nil {
+		return err
+	}
+
+	// TODO: read data["apis"][*].path and download the rest of the jsons
+	log.Println(data["basePath"].(string))
+
+	// log.Println("End pull")
+
+	return nil
+}
+
+func downloadJSONFile(client http.Client, url string, path string, raw bool) error {
+	request, err := initRequest("GET", url, nil)
 	if err != nil {
 		return err
 	}
@@ -57,21 +80,47 @@ func pullLatestSwaggerDocs(cmd *cobra.Command, args []string) error {
 	}
 	defer response.Body.Close()
 
-	definitionsPath := filepath.Join(rootPath, "definitions.json")
-
 	if raw {
-		if err := writeToFile(response.Body, definitionsPath); err != nil {
+		if err := writeToFile(response.Body, path); err != nil {
 			return err
 		}
 	} else {
-		if err := writeToFileIndent(response.Body, definitionsPath); err != nil {
+		if err := writeToFileIndent(response.Body, path); err != nil {
 			return err
 		}
 	}
 
-	// log.Println("End pull")
-
 	return nil
+}
+
+func readJSONObjectFile(path string) (map[string]interface{}, error) {
+	fileBytes, err := readFileBytes(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var data map[string]interface{}
+
+	if err := json.Unmarshal(fileBytes, &data); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func readFileBytes(path string) ([]byte, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	return fileBytes, nil
 }
 
 func initPath() (string, error) {
