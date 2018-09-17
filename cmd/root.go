@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/paultyng/go-newrelic/api"
+	"github.com/burck1/go-newrelic/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

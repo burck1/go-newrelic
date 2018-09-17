@@ -1,4 +1,4 @@
-package: github.com/paultyng/go-newrelic
+package: github.com/burck1/go-newrelic
 import:
 - package: github.com/imdario/mergo
   version: ^0.2.2
