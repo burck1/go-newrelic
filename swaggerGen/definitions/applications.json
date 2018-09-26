@@ -1,5 +1,9 @@
 {
+  "swaggerVersion": "1.1",
   "apiVersion": "v2",
+  "basePath": "https://api.newrelic.com",
+  "resourcePath": "",
+  "notes": "\u003cp\u003eThe applications resource provides general information about applications monitored by New Relic, including\nresponse time, apdex, throughput and settings. It allows for querying and filtering on multiple parameters\nas well as retrieving information for a single application.\u003c/p\u003e\n",
   "apis": [
     {
       "operations": [
@@ -422,7 +426,6 @@
       "path": "/v2/applications/{application_id}/metrics/data.{format}"
     }
   ],
-  "basePath": "https://api.newrelic.com",
   "models": {
     "AppSettingsBody": {
       "properties": {
@@ -847,8 +850,5 @@
       }
     }
   },
-  "notes": "\u003cp\u003eThe applications resource provides general information about applications monitored by New Relic, including\nresponse time, apdex, throughput and settings. It allows for querying and filtering on multiple parameters\nas well as retrieving information for a single application.\u003c/p\u003e\n",
-  "nrExtensions": {},
-  "resourcePath": "",
-  "swaggerVersion": "1.1"
+  "nrExtensions": {}
 }

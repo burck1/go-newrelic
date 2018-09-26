@@ -907,3 +907,6 @@ This looks like pretty standard swagger docs based on the spec found here: https
     "nrExtensions": {}
 }
 ```
+
+## Converting New Relic's Docs to the Seagger 2.0 spec
+
