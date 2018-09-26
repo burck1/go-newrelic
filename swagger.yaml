@@ -1,0 +1,5433 @@
+swagger: '2.0'
+info:
+  version: v2
+  title: New Relic v2 REST API
+host: api.newrelic.com
+basePath: /
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  '/v2/applications.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - applications
+      operationId: V2ApplicationsJsonGet
+      parameters:
+        - name: 'filter[name]'
+          in: query
+          required: false
+          type: string
+          description: Filter by application name
+        - name: 'filter[host]'
+          in: query
+          required: false
+          type: string
+          description: Filter by application host
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by application ids
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: 'filter[language]'
+          in: query
+          required: false
+          type: string
+          description: Filter by application language
+        - name: exclude_links
+          in: query
+          required: false
+          type: boolean
+          description: Exclude links section from the response
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - applications
+      operationId: V2ApplicationsJsonByIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Application found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    put:
+      description: Update
+      summary: update
+      tags:
+        - applications
+      operationId: V2ApplicationsJsonByIdPut
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: application
+          in: body
+          required: true
+          description: Application schema
+          schema:
+            $ref: '#/definitions/Application'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Application found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred when updating the application
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - applications
+      operationId: V2ApplicationsJsonByIdDelete
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Application found with the given ID
+          schema: {}
+        '409':
+          description: Cannot delete an application that is still reporting data.
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/metrics.json':
+    get:
+      description: Metric Names
+      summary: metric_names
+      tags:
+        - applications
+      operationId: V2ApplicationsMetricsJsonByApplicationIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: name
+          in: query
+          required: false
+          type: string
+          description: Filter metrics by name
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index (will be deprecated)
+        - name: cursor
+          in: query
+          required: false
+          type: string
+          description: Cursor for next page (replacing page param)
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricParserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/metrics/data.json':
+    get:
+      description: Metric Data
+      summary: metric_data
+      tags:
+        - applications
+      operationId: V2ApplicationsMetricsDataJsonByApplicationIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: names
+          in: query
+          required: true
+          type: array
+          description: Retrieve specific metrics by name
+          collectionFormat: csv
+          items:
+            type: string
+        - name: values
+          in: query
+          required: false
+          type: array
+          description: Retrieve specific metric values
+          collectionFormat: csv
+          items:
+            type: string
+        - name: from
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics after this time
+          format: date-time
+        - name: to
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics before this time
+          format: date-time
+        - name: period
+          in: query
+          required: false
+          type: integer
+          description: Period of timeslices in seconds
+        - name: summarize
+          in: query
+          required: false
+          type: boolean
+          description: Summarize the data
+        - name: raw
+          in: query
+          required: false
+          type: boolean
+          description: Return unformatted raw values
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/hosts.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - application_hosts
+      operationId: V2ApplicationsHostsJsonByApplicationIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: 'filter[hostname]'
+          in: query
+          required: false
+          type: string
+          description: Filter by server hostname
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by application host ids
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationHostResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/hosts/{host_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - application_hosts
+      operationId: V2ApplicationsHostsJsonByApplicationIdAndIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: host_id
+          in: path
+          required: true
+          type: integer
+          description: Application host ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationHostResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No application host found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/hosts/{host_id}/metrics.json':
+    get:
+      description: Metric Names
+      summary: names
+      tags:
+        - application_hosts
+      operationId: V2ApplicationsHostsMetricsJsonByApplicationIdAndHostIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: host_id
+          in: path
+          required: true
+          type: integer
+          description: Application Host ID
+        - name: name
+          in: query
+          required: false
+          type: string
+          description: Filter metrics by name
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index (will be deprecated)
+        - name: cursor
+          in: query
+          required: false
+          type: string
+          description: Cursor for next page (replacing page param)
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricParserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/hosts/{host_id}/metrics/data.json':
+    get:
+      description: Metric Data
+      summary: data
+      tags:
+        - application_hosts
+      operationId: V2ApplicationsHostsMetricsDataJsonByApplicationIdAndHostIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: host_id
+          in: path
+          required: true
+          type: integer
+          description: Application Host ID
+        - name: names
+          in: query
+          required: true
+          type: array
+          description: Retrieve specific metrics by name
+          collectionFormat: csv
+          items:
+            type: string
+        - name: values
+          in: query
+          required: false
+          type: array
+          description: Retrieve specific metric values
+          collectionFormat: csv
+          items:
+            type: string
+        - name: from
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics after this time
+          format: date-time
+        - name: to
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics before this time
+          format: date-time
+        - name: period
+          in: query
+          required: false
+          type: integer
+          description: Period of timeslices in seconds
+        - name: summarize
+          in: query
+          required: false
+          type: boolean
+          description: Summarize the data
+        - name: raw
+          in: query
+          required: false
+          type: boolean
+          description: Return unformatted raw values
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/instances.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - application_instances
+      operationId: V2ApplicationsInstancesJsonByApplicationIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: 'filter[hostname]'
+          in: query
+          required: false
+          type: string
+          description: Filter by server hostname
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by application instance ids
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationInstanceResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/instances/{instance_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - application_instances
+      operationId: V2ApplicationsInstancesJsonByApplicationIdAndIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: instance_id
+          in: path
+          required: true
+          type: integer
+          description: Application instance ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationInstanceResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No application instance found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/instances/{instance_id}/metrics.json':
+    get:
+      description: Metric Names
+      summary: names
+      tags:
+        - application_instances
+      operationId: V2ApplicationsInstancesMetricsJsonByApplicationIdAndInstanceIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: instance_id
+          in: path
+          required: true
+          type: integer
+          description: Application Instance ID
+        - name: name
+          in: query
+          required: false
+          type: string
+          description: Filter metrics by name
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index (will be deprecated)
+        - name: cursor
+          in: query
+          required: false
+          type: string
+          description: Cursor for next page (replacing page param)
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricParserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/instances/{instance_id}/metrics/data.json':
+    get:
+      description: Metric Data
+      summary: data
+      tags:
+        - application_instances
+      operationId: V2ApplicationsInstancesMetricsDataJsonByApplicationIdAndInstanceIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: instance_id
+          in: path
+          required: true
+          type: integer
+          description: Application Instance ID
+        - name: names
+          in: query
+          required: true
+          type: array
+          description: Retrieve specific metrics by name
+          collectionFormat: csv
+          items:
+            type: string
+        - name: values
+          in: query
+          required: false
+          type: array
+          description: Retrieve specific metric values
+          collectionFormat: csv
+          items:
+            type: string
+        - name: from
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics after this time
+          format: date-time
+        - name: to
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics before this time
+          format: date-time
+        - name: period
+          in: query
+          required: false
+          type: integer
+          description: Period of timeslices in seconds
+        - name: summarize
+          in: query
+          required: false
+          type: boolean
+          description: Summarize the data
+        - name: raw
+          in: query
+          required: false
+          type: boolean
+          description: Return unformatted raw values
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/deployments.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - application_deployments
+      operationId: V2ApplicationsDeploymentsJsonByApplicationIdGet
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DeploymentResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Application found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    post:
+      description: Create
+      summary: create
+      tags:
+        - application_deployments
+      operationId: V2ApplicationsDeploymentsJsonByApplicationIdPost
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: deployment
+          in: body
+          required: true
+          description: Deployment schema
+          schema:
+            $ref: '#/definitions/Deployment'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DeploymentResponse'
+        '400':
+          description: Revision parameter required
+          schema: {}
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Application found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/applications/{application_id}/deployments/{deployment_id}.json':
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - application_deployments
+      operationId: V2ApplicationsDeploymentsJsonByApplicationIdAndIdDelete
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          type: integer
+          description: Application ID
+        - name: deployment_id
+          in: path
+          required: true
+          type: integer
+          description: Deployment ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DeploymentResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Deployment found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/mobile_applications.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - mobile_applications
+      operationId: V2MobileApplicationsJsonGet
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MobileApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/mobile_applications/{mobile_application_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - mobile_applications
+      operationId: V2MobileApplicationsJsonByIdGet
+      parameters:
+        - name: mobile_application_id
+          in: path
+          required: true
+          type: integer
+          description: Mobile Application ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MobileApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Mobile Application found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/mobile_applications/{mobile_application_id}/metrics.json':
+    get:
+      description: Metric Names
+      summary: metric_names
+      tags:
+        - mobile_applications
+      operationId: V2MobileApplicationsMetricsJsonByMobileApplicationIdGet
+      parameters:
+        - name: mobile_application_id
+          in: path
+          required: true
+          type: integer
+          description: Mobile application ID
+        - name: name
+          in: query
+          required: false
+          type: string
+          description: Filter metrics by name
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index (will be deprecated)
+        - name: cursor
+          in: query
+          required: false
+          type: string
+          description: Cursor for next page (replacing page param)
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricParserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/mobile_applications/{mobile_application_id}/metrics/data.json':
+    get:
+      description: Metric Data
+      summary: metric_data
+      tags:
+        - mobile_applications
+      operationId: V2MobileApplicationsMetricsDataJsonByMobileApplicationIdGet
+      parameters:
+        - name: mobile_application_id
+          in: path
+          required: true
+          type: integer
+          description: Mobile application ID
+        - name: names
+          in: query
+          required: true
+          type: array
+          description: Retrieve specific metrics by name
+          collectionFormat: csv
+          items:
+            type: string
+        - name: values
+          in: query
+          required: false
+          type: array
+          description: Retrieve specific metric values
+          collectionFormat: csv
+          items:
+            type: string
+        - name: from
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics after this time
+          format: date-time
+        - name: to
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics before this time
+          format: date-time
+        - name: period
+          in: query
+          required: false
+          type: integer
+          description: Period of timeslices in seconds
+        - name: summarize
+          in: query
+          required: false
+          type: boolean
+          description: Summarize the data
+        - name: raw
+          in: query
+          required: false
+          type: boolean
+          description: Return unformatted raw values
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/browser_applications.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - browser_applications
+      operationId: V2BrowserApplicationsJsonGet
+      parameters:
+        - name: 'filter[name]'
+          in: query
+          required: false
+          type: string
+          description: Filter by application name
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by application ids
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BrowserApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    post:
+      description: Create
+      summary: create
+      tags:
+        - browser_applications
+      operationId: V2BrowserApplicationsJsonPost
+      parameters:
+        - name: browser_application
+          in: body
+          required: true
+          description: Browser Application Schema
+          schema:
+            $ref: '#/definitions/BrowserApplication'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BrowserApplicationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/key_transactions.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - key_transactions
+      operationId: V2KeyTransactionsJsonGet
+      parameters:
+        - name: 'filter[name]'
+          in: query
+          required: false
+          type: string
+          description: Filter by name
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by policy IDs
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/KeyTransactionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/key_transactions/{key_transaction_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - key_transactions
+      operationId: V2KeyTransactionsJsonByIdGet
+      parameters:
+        - name: key_transaction_id
+          in: path
+          required: true
+          type: integer
+          description: Key transaction ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/KeyTransactionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No key transaction found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/servers.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - servers
+      operationId: V2ServersJsonGet
+      parameters:
+        - name: 'filter[name]'
+          in: query
+          required: false
+          type: string
+          description: Filter by name
+        - name: 'filter[host]'
+          in: query
+          required: false
+          type: string
+          description: Filter by host
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by server IDs
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: 'filter[labels]'
+          in: query
+          required: false
+          type: string
+          description: Filter by server labels (beta)
+        - name: 'filter[reported]'
+          in: query
+          required: false
+          type: boolean
+          description: Filter by reported in last 10 hours
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ServerResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/servers/{server_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - servers
+      operationId: V2ServersJsonByIdGet
+      parameters:
+        - name: server_id
+          in: path
+          required: true
+          type: integer
+          description: Server ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ServerResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Server found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    put:
+      description: Update
+      summary: update
+      tags:
+        - servers
+      operationId: V2ServersJsonByIdPut
+      parameters:
+        - name: server_id
+          in: path
+          required: true
+          type: integer
+          description: Server ID
+        - name: server
+          in: body
+          required: true
+          description: New name of the server
+          schema:
+            $ref: '#/definitions/Server'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ServerResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Server found with the given ID
+          schema: {}
+        '422':
+          description: Invalid attributes were sent to update
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - servers
+      operationId: V2ServersJsonByIdDelete
+      parameters:
+        - name: server_id
+          in: path
+          required: true
+          type: integer
+          description: Server ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ServerResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Server found with the given ID
+          schema: {}
+        '409':
+          description: Cannot delete a Server that is still reporting data.
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/servers/{server_id}/metrics.json':
+    get:
+      description: Metric Names
+      summary: names
+      tags:
+        - servers
+      operationId: V2ServersMetricsJsonByServerIdGet
+      parameters:
+        - name: server_id
+          in: path
+          required: true
+          type: integer
+          description: Server ID
+        - name: name
+          in: query
+          required: false
+          type: string
+          description: Filter metrics by name
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index (will be deprecated)
+        - name: cursor
+          in: query
+          required: false
+          type: string
+          description: Cursor for next page (replacing page param)
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricParserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/servers/{server_id}/metrics/data.json':
+    get:
+      description: Metric Data
+      summary: data
+      tags:
+        - servers
+      operationId: V2ServersMetricsDataJsonByServerIdGet
+      parameters:
+        - name: server_id
+          in: path
+          required: true
+          type: integer
+          description: Server ID
+        - name: names
+          in: query
+          required: true
+          type: array
+          description: Retrieve specific metrics by name
+          collectionFormat: csv
+          items:
+            type: string
+        - name: values
+          in: query
+          required: false
+          type: array
+          description: Retrieve specific metric values
+          collectionFormat: csv
+          items:
+            type: string
+        - name: from
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics after this time
+          format: date-time
+        - name: to
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics before this time
+          format: date-time
+        - name: period
+          in: query
+          required: false
+          type: integer
+          description: Period of timeslices in seconds
+        - name: summarize
+          in: query
+          required: false
+          type: boolean
+          description: Summarize the data
+        - name: raw
+          in: query
+          required: false
+          type: boolean
+          description: Return unformatted raw values
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/usages/{product}.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - usages
+      operationId: V2UsagesJsonByProductGet
+      parameters:
+        - name: product
+          in: path
+          required: true
+          type: string
+          description: 'Available: apm, browser, mobile.'
+        - name: start_date
+          in: query
+          required: true
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date
+        - name: end_date
+          in: query
+          required: true
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date
+        - name: include_subaccounts
+          in: query
+          required: false
+          type: boolean
+          description: 'Include subaccounts usage? (default: false)'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UsageDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/users.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - users
+      operationId: V2UsersJsonGet
+      parameters:
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter by user IDs
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: 'filter[email]'
+          in: query
+          required: false
+          type: string
+          description: Filter by user email
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: ''
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/users/{user_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - users
+      operationId: V2UsersJsonByIdGet
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+          description: User ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No user found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/users/{user_id}/reset_password.json':
+    post:
+      description: Reset password
+      summary: reset_password
+      tags:
+        - users
+      operationId: V2UsersResetPasswordJsonByIdPost
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+          description: User ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_events.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_events
+      operationId: V2AlertsEventsJsonGet
+      parameters:
+        - name: 'filter[product]'
+          in: query
+          required: false
+          type: string
+          description: Filter by New Relic product
+        - name: 'filter[entity_type]'
+          in: query
+          required: false
+          type: string
+          description: Filter by entity type
+        - name: 'filter[entity_group_id]'
+          in: query
+          required: false
+          type: integer
+          description: Filter by entity group ID
+        - name: 'filter[entity_id]'
+          in: query
+          required: false
+          type: integer
+          description: Filter by entity ID
+        - name: 'filter[event_type]'
+          in: query
+          required: false
+          type: string
+          description: Filter by event type
+        - name: 'filter[incident_id]'
+          in: query
+          required: false
+          type: integer
+          description: Filter by incident id
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/RecentEventResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_conditions/policies/{policy_id}.json':
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_conditions
+      operationId: V2AlertsConditionsPoliciesJsonByPolicyIdPost
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/Condition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No alert policy was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to create the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_conditions/{condition_id}.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_conditions
+      operationId: V2AlertsConditionsJsonByIdPut
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID to update
+        - name: condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/Condition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to update the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_conditions
+      operationId: V2AlertsConditionsJsonByConditionIdDelete
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        '422':
+          description: Validation exception occured
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_conditions.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_conditions
+      operationId: V2AlertsConditionsJsonGet
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts policy was found for the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_plugins_conditions/policies/{policy_id}.json':
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_plugins_conditions
+      operationId: V2AlertsPluginsConditionsPoliciesJsonByPolicyIdPost
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: plugins_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/PluginsCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PluginsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No alert policy was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to create the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_plugins_conditions/{condition_id}.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_plugins_conditions
+      operationId: V2AlertsPluginsConditionsJsonByIdPut
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID to update
+        - name: plugins_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/PluginsCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PluginsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to update the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_plugins_conditions
+      operationId: V2AlertsPluginsConditionsJsonByConditionIdDelete
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PluginsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_plugins_conditions.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_plugins_conditions
+      operationId: V2AlertsPluginsConditionsJsonGet
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PluginsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts policy was found for the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_external_service_conditions/policies/{policy_id}.json':
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_external_service_conditions
+      operationId: V2AlertsExternalServiceConditionsPoliciesJsonByPolicyIdPost
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: external_service_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/ExternalServiceCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ExternalServiceConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No alert policy was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to create the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_external_service_conditions/{condition_id}.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_external_service_conditions
+      operationId: V2AlertsExternalServiceConditionsJsonByIdPut
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID to update
+        - name: external_service_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/ExternalServiceCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ExternalServiceConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to update the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_external_service_conditions
+      operationId: V2AlertsExternalServiceConditionsJsonByConditionIdDelete
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ExternalServiceConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_external_service_conditions.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_external_service_conditions
+      operationId: V2AlertsExternalServiceConditionsJsonGet
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ExternalServiceConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts policy was found for the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_synthetics_conditions/policies/{policy_id}.json':
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_synthetics_conditions
+      operationId: V2AlertsSyntheticsConditionsPoliciesJsonByPolicyIdPost
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: synthetics_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/SyntheticsCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SyntheticsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No alert policy was found with the given ID
+          schema: {}
+        '406':
+          description: Bad entity type
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to create the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_synthetics_conditions/{condition_id}.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_synthetics_conditions
+      operationId: V2AlertsSyntheticsConditionsJsonByIdPut
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID to update
+        - name: synthetics_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/SyntheticsCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SyntheticsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        '406':
+          description: Bad entity type
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to update the alert condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_synthetics_conditions
+      operationId: V2AlertsSyntheticsConditionsJsonByConditionIdDelete
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SyntheticsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_synthetics_conditions.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_synthetics_conditions
+      operationId: V2AlertsSyntheticsConditionsJsonGet
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SyntheticsConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts policy was found for the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_nrql_conditions/policies/{policy_id}.json':
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_nrql_conditions
+      operationId: V2AlertsNrqlConditionsPoliciesJsonByPolicyIdPost
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: nrql_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/NrqlCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/NrqlConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts policy was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to create the Alerts condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_nrql_conditions/{condition_id}.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_nrql_conditions
+      operationId: V2AlertsNrqlConditionsJsonByIdPut
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID to update
+        - name: nrql_condition
+          in: body
+          required: true
+          description: Condition schema
+          schema:
+            $ref: '#/definitions/NrqlCondition'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/NrqlConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        '422':
+          description: Validation error occurred while trying to update the Alerts condition
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_nrql_conditions
+      operationId: V2AlertsNrqlConditionsJsonByConditionIdDelete
+      parameters:
+        - name: condition_id
+          in: path
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/NrqlConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition was found with the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_nrql_conditions.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_nrql_conditions
+      operationId: V2AlertsNrqlConditionsJsonGet
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts policy ID
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/NrqlConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts policy was found for the given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_policies.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_policies
+      operationId: V2AlertsPoliciesJsonGet
+      parameters:
+        - name: 'filter[name]'
+          in: query
+          required: false
+          type: string
+          description: Name (must be exact match)
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PolicyResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '422':
+          description: Validation or internal error occurred
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_policies
+      operationId: V2AlertsPoliciesJsonPost
+      parameters:
+        - name: policy
+          in: body
+          required: true
+          description: Policy Schema
+          schema:
+            $ref: '#/definitions/Policy'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PolicyResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '422':
+          description: Validation or internal error occurred while trying to create the Alerts policy
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_policies/{policy_id}.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_policies
+      operationId: V2AlertsPoliciesJsonByIdPut
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Policy ID
+        - name: policy
+          in: body
+          required: true
+          description: Policy Schema
+          schema:
+            $ref: '#/definitions/Policy'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PolicyResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: Alerts policy could not be found for updating
+          schema: {}
+        '422':
+          description: Validation or internal error occurred while trying to update the Alerts policy
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_policies
+      operationId: V2AlertsPoliciesJsonByPolicyIdDelete
+      parameters:
+        - name: policy_id
+          in: path
+          required: true
+          type: integer
+          description: Policy ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PolicyResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: Alerts policy could not be found for deleting
+          schema: {}
+        '422':
+          description: Validation or internal error occurred
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_channels.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_channels
+      operationId: V2AlertsChannelsJsonGet
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ChannelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '422':
+          description: Validation or internal error occurred
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    post:
+      description: Create
+      summary: create
+      tags:
+        - alerts_channels
+      operationId: V2AlertsChannelsJsonPost
+      parameters:
+        - name: channel
+          in: body
+          required: true
+          description: channel schema
+          schema:
+            $ref: '#/definitions/Channel'
+        - name: policy_ids
+          in: query
+          required: false
+          type: array
+          description: Policy IDs to associate with channel
+          collectionFormat: csv
+          items:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ChannelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '422':
+          description: Validation or internal error occurred
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_channels/{channel_id}.json':
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_channels
+      operationId: V2AlertsChannelsJsonByChannelIdDelete
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          type: integer
+          description: Channel ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ChannelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No channel was found with the given ID
+          schema: {}
+        '406':
+          description: Cannot delete USER channels
+          schema: {}
+        '422':
+          description: Validation or internal error occurred
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_policy_channels.json':
+    put:
+      description: Update
+      summary: update
+      tags:
+        - alerts_policy_channels
+      operationId: V2AlertsPolicyChannelsJsonPut
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Policy ID
+        - name: channel_ids
+          in: query
+          required: true
+          type: array
+          description: Channel IDs
+          collectionFormat: csv
+          items:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PolicyChannelsResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No policy channel found with the given ID
+          schema: {}
+        '422':
+          description: Validation or internal error occurred while trying to update the policy channels
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - alerts_policy_channels
+      operationId: V2AlertsPolicyChannelsJsonDelete
+      parameters:
+        - name: policy_id
+          in: query
+          required: true
+          type: integer
+          description: Policy ID
+        - name: channel_id
+          in: query
+          required: true
+          type: integer
+          description: Channel ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ChannelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No policy channel found with the given ID
+          schema: {}
+        '422':
+          description: Validation or internal error occurred while trying to delete the policy channels
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_violations.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_violations
+      operationId: V2AlertsViolationsJsonGet
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+        - name: start_date
+          in: query
+          required: false
+          type: string
+          description: Retrieve violations created after this time
+          format: date-time
+        - name: end_date
+          in: query
+          required: false
+          type: string
+          description: Retrieve violations created before this time
+          format: date-time
+        - name: only_open
+          in: query
+          required: false
+          type: boolean
+          description: Filter by open violations
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ViolationResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '422':
+          description: Internal error occurred while trying to list violations
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_incidents.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_incidents
+      operationId: V2AlertsIncidentsJsonGet
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+        - name: only_open
+          in: query
+          required: false
+          type: boolean
+          description: Filter by open incidents
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/IncidentResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '422':
+          description: Validation exception occured
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/alerts_entity_conditions/{entity_id}.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - alerts_entity_conditions
+      operationId: V2AlertsEntityConditionsJsonByEntityIdGet
+      parameters:
+        - name: entity_id
+          in: path
+          required: true
+          type: integer
+          description: Entity ID
+        - name: entity_type
+          in: query
+          required: true
+          type: string
+          description: Entity Type
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '406':
+          description: Bad entity type
+          schema: {}
+        '422':
+          description: Internal error occurred while trying to add the Alerts entity
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    put:
+      description: Add
+      summary: add
+      tags:
+        - alerts_entity_conditions
+      operationId: V2AlertsEntityConditionsJsonByEntityIdPut
+      parameters:
+        - name: entity_id
+          in: path
+          required: true
+          type: integer
+          description: Entity id to add
+        - name: entity_type
+          in: query
+          required: true
+          type: string
+          description: Entity Type
+        - name: condition_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition found with the given ID
+          schema: {}
+        '406':
+          description: Bad entity type
+          schema: {}
+        '422':
+          description: Validation or internal error occurred while trying to add the Alerts entity
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Remove
+      summary: remove
+      tags:
+        - alerts_entity_conditions
+      operationId: V2AlertsEntityConditionsJsonByEntityIdDelete
+      parameters:
+        - name: entity_id
+          in: path
+          required: true
+          type: integer
+          description: Entity id to remove
+        - name: entity_type
+          in: query
+          required: true
+          type: string
+          description: Entity Type
+        - name: condition_id
+          in: query
+          required: true
+          type: integer
+          description: Alerts condition ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConditionResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Alerts condition found with the given ID
+          schema: {}
+        '406':
+          description: Bad entity type
+          schema: {}
+        '422':
+          description: Validation or internal error occurred while trying to remove the Alerts entity
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/dashboards.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - dashboards
+      operationId: V2DashboardsJsonGet
+      parameters:
+        - name: 'filter[title]'
+          in: query
+          required: false
+          type: string
+          description: Contains title
+        - name: 'filter[owner_email]'
+          in: query
+          required: false
+          type: string
+          description: Contains owner email
+        - name: 'filter[category]'
+          in: query
+          required: false
+          type: string
+          description: Category is one of ('all' | 'favorite' | 'mine')
+        - name: 'filter[created_before]'
+          in: query
+          required: false
+          type: string
+          description: Created before given date
+          format: date-time
+        - name: 'filter[created_after]'
+          in: query
+          required: false
+          type: string
+          description: Created after given date
+          format: date-time
+        - name: 'filter[updated_before]'
+          in: query
+          required: false
+          type: string
+          description: Updated before given date
+          format: date-time
+        - name: 'filter[updated_after]'
+          in: query
+          required: false
+          type: string
+          description: Updated after given date
+          format: date-time
+        - name: sort
+          in: query
+          required: false
+          type: string
+          description: Sort is one of ('name' | 'recently viewed' | 'last edited')
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+        - name: per_page
+          in: query
+          required: false
+          type: integer
+          description: Number of items per page
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DashboardResponse'
+        '400':
+          description: Provided page number is not 1 or higher
+          schema: {}
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '503':
+          description: Service unavailable
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    post:
+      description: Create
+      summary: create
+      tags:
+        - dashboards
+      operationId: V2DashboardsJsonPost
+      parameters:
+        - name: dashboard
+          in: body
+          required: true
+          description: Dashboard schema
+          schema:
+            $ref: '#/definitions/Dashboard'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DashboardResponse'
+        '400':
+          description: Dashboard payload failed validation
+          schema: {}
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '503':
+          description: Service unavailable
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/dashboards/{dashboard_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - dashboards
+      operationId: V2DashboardsJsonByIdGet
+      parameters:
+        - name: dashboard_id
+          in: path
+          required: true
+          type: integer
+          description: Dashboard ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DashboardResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: Dashboard does not exist or is inaccessible
+          schema: {}
+        '503':
+          description: Service unavailable
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    put:
+      description: Update
+      summary: update
+      tags:
+        - dashboards
+      operationId: V2DashboardsJsonByIdPut
+      parameters:
+        - name: dashboard_id
+          in: path
+          required: true
+          type: integer
+          description: Dashboard ID
+        - name: dashboard
+          in: body
+          required: true
+          description: Dashboard schema
+          schema:
+            $ref: '#/definitions/Dashboard'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DashboardResponse'
+        '400':
+          description: Dashboard payload failed validation
+          schema: {}
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: Dashboard does not exist or is inaccessible
+          schema: {}
+        '503':
+          description: Service unavailable
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - dashboards
+      operationId: V2DashboardsJsonByIdDelete
+      parameters:
+        - name: dashboard_id
+          in: path
+          required: true
+          type: integer
+          description: Dashboard ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DashboardResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: Dashboard does not exist or is inaccessible
+          schema: {}
+        '503':
+          description: Service unavailable
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/plugins.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - plugins
+      operationId: V2PluginsJsonGet
+      parameters:
+        - name: 'filter[guid]'
+          in: query
+          required: false
+          type: string
+          description: Filter plugin by guid
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter plugin by ids
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+        - name: detailed
+          in: query
+          required: false
+          type: boolean
+          description: Include all data about a plugin
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PluginResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/plugins/{plugin_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - plugins
+      operationId: V2PluginsJsonByIdGet
+      parameters:
+        - name: plugin_id
+          in: path
+          required: true
+          type: integer
+          description: Plugin ID
+        - name: detailed
+          in: query
+          required: false
+          type: boolean
+          description: Include all data about a plugin
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PluginResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Plugin found with given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/components.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - components
+      operationId: V2ComponentsJsonGet
+      parameters:
+        - name: 'filter[name]'
+          in: query
+          required: false
+          type: string
+          description: Filter components by name
+        - name: 'filter[ids]'
+          in: query
+          required: false
+          type: array
+          description: Filter components by ids
+          collectionFormat: csv
+          items:
+            type: integer
+        - name: 'filter[plugin_id]'
+          in: query
+          required: false
+          type: integer
+          description: Filter components by the plugin
+        - name: health_status
+          in: query
+          required: false
+          type: boolean
+          description: Include component health status
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ComponentResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/components/{component_id}.json':
+    get:
+      description: Show
+      summary: show
+      tags:
+        - components
+      operationId: V2ComponentsJsonByIdGet
+      parameters:
+        - name: component_id
+          in: path
+          required: true
+          type: integer
+          description: Plugin ID
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ComponentResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        '404':
+          description: No Plugin found with given ID
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/components/{component_id}/metrics.json':
+    get:
+      description: Metric Names
+      summary: names
+      tags:
+        - components
+      operationId: V2ComponentsMetricsJsonByComponentIdGet
+      parameters:
+        - name: component_id
+          in: path
+          required: true
+          type: integer
+          description: Component ID
+        - name: name
+          in: query
+          required: false
+          type: string
+          description: Filter metrics by name
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index (will be deprecated)
+        - name: cursor
+          in: query
+          required: false
+          type: string
+          description: Cursor for next page (replacing page param)
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricParserResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/components/{component_id}/metrics/data.json':
+    get:
+      description: Metric Data
+      summary: data
+      tags:
+        - components
+      operationId: V2ComponentsMetricsDataJsonByComponentIdGet
+      parameters:
+        - name: component_id
+          in: path
+          required: true
+          type: integer
+          description: Component ID
+        - name: names
+          in: query
+          required: true
+          type: array
+          description: Retrieve specific metrics by name
+          collectionFormat: csv
+          items:
+            type: string
+        - name: values
+          in: query
+          required: false
+          type: array
+          description: Retrieve specific metric values
+          collectionFormat: csv
+          items:
+            type: string
+        - name: from
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics after this time
+          format: date-time
+        - name: to
+          in: query
+          required: false
+          type: string
+          description: Retrieve metrics before this time
+          format: date-time
+        - name: period
+          in: query
+          required: false
+          type: integer
+          description: Period of timeslices in seconds
+        - name: summarize
+          in: query
+          required: false
+          type: boolean
+          description: Summarize the data
+        - name: raw
+          in: query
+          required: false
+          type: boolean
+          description: Return unformatted raw values
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MetricDataResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/labels.json':
+    get:
+      description: List
+      summary: list
+      tags:
+        - labels
+      operationId: V2LabelsJsonGet
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          description: Pagination index
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LabelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+    put:
+      description: Create
+      summary: create
+      tags:
+        - labels
+      operationId: V2LabelsJsonPut
+      parameters:
+        - name: label
+          in: body
+          required: true
+          description: Label schema
+          schema:
+            $ref: '#/definitions/Label'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LabelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+  '/v2/labels/{key}.json':
+    delete:
+      description: Delete
+      summary: delete
+      tags:
+        - labels
+      operationId: V2LabelsJsonByKeyDelete
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+          description: 'Label key. Example: ''Language:Java'''
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LabelResponse'
+        '401':
+          description: Invalid API key
+          schema: {}
+        '403':
+          description: New Relic API access has not been enabled
+          schema: {}
+        default:
+          description: 'A server error occurred, please contact <a href="http://support.newrelic.com">New Relic support</a>'
+          schema: {}
+      security: []
+definitions:
+  ApplicationResponse:
+    title: ApplicationResponse
+    type: object
+    properties:
+      application:
+        $ref: '#/definitions/ApplicationResponseType'
+  ApplicationResponseType:
+    title: ApplicationResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      language:
+        description: ''
+        type: string
+      health_status:
+        description: ''
+        type: string
+      reporting:
+        description: ''
+        type: boolean
+      last_reported_at:
+        description: ''
+        type: string
+        format: date-time
+      application_summary:
+        $ref: '#/definitions/AppSummaryResponse'
+      end_user_summary:
+        $ref: '#/definitions/EndUserSummaryResponse'
+      settings:
+        $ref: '#/definitions/AppSettingsResponse'
+      links:
+        $ref: '#/definitions/ApplicationLinksResponse'
+  Application:
+    title: Application
+    type: object
+    properties:
+      application:
+        $ref: '#/definitions/ApplicationBody'
+  ApplicationBody:
+    title: ApplicationBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      settings:
+        $ref: '#/definitions/AppSettingsBody'
+  AppSummaryResponse:
+    title: AppSummaryResponse
+    type: object
+    properties:
+      response_time:
+        description: ''
+        type: number
+        format: double
+      throughput:
+        description: ''
+        type: number
+        format: double
+      error_rate:
+        description: ''
+        type: number
+        format: double
+      apdex_target:
+        description: ''
+        type: number
+        format: double
+      apdex_score:
+        description: ''
+        type: number
+        format: double
+      host_count:
+        description: ''
+        type: integer
+        format: int32
+      instance_count:
+        description: ''
+        type: integer
+        format: int32
+      concurrent_instance_count:
+        description: ''
+        type: integer
+        format: int32
+  EndUserSummaryResponse:
+    title: EndUserSummaryResponse
+    type: object
+    properties:
+      response_time:
+        description: ''
+        type: number
+        format: double
+      throughput:
+        description: ''
+        type: number
+        format: double
+      apdex_target:
+        description: ''
+        type: number
+        format: double
+      apdex_score:
+        description: ''
+        type: number
+        format: double
+  AppSettingsResponse:
+    title: AppSettingsResponse
+    type: object
+    properties:
+      app_apdex_threshold:
+        description: ''
+        type: number
+        format: double
+      end_user_apdex_threshold:
+        description: ''
+        type: number
+        format: double
+      enable_real_user_monitoring:
+        description: ''
+        type: boolean
+      use_server_side_config:
+        description: ''
+        type: boolean
+  AppSettingsBody:
+    title: AppSettingsBody
+    type: object
+    properties:
+      app_apdex_threshold:
+        description: ''
+        type: number
+        format: double
+      end_user_apdex_threshold:
+        description: ''
+        type: number
+        format: double
+      enable_real_user_monitoring:
+        description: ''
+        type: boolean
+  ApplicationLinksResponse:
+    title: ApplicationLinksResponse
+    type: object
+    properties:
+      servers:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      application_hosts:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      application_instances:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      alert_policy:
+        description: ''
+        type: integer
+        format: int32
+  MetricParserResponse:
+    title: MetricParserResponse
+    type: object
+    properties:
+      metric:
+        $ref: '#/definitions/MetricParserResponseType'
+  MetricParserResponseType:
+    title: MetricParserResponseType
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      values:
+        description: ''
+        type: array
+        items:
+          type: string
+  MetricDataResponse:
+    title: MetricDataResponse
+    type: object
+    properties:
+      metric_data:
+        $ref: '#/definitions/MetricDataResponseType'
+  MetricDataResponseType:
+    title: MetricDataResponseType
+    type: object
+    properties:
+      from:
+        description: ''
+        type: string
+        format: date-time
+      to:
+        description: ''
+        type: string
+        format: date-time
+      metrics_not_found:
+        description: ''
+        type: string
+      metrics_found:
+        description: ''
+        type: string
+      metrics:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/MetricResponse'
+  MetricResponse:
+    title: MetricResponse
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      timeslices:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/TimesliceResponse'
+  TimesliceResponse:
+    title: TimesliceResponse
+    type: object
+    properties:
+      from:
+        description: ''
+        type: string
+        format: date-time
+      to:
+        description: ''
+        type: string
+        format: date-time
+      values:
+        description: ''
+        type: object
+        additionalProperties:
+          type: object
+  EventResponse:
+    title: EventResponse
+    type: object
+    properties:
+      event:
+        $ref: '#/definitions/EventResponseType'
+  EventResponseType:
+    title: EventResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      type:
+        description: ''
+        type: string
+      level:
+        description: ''
+        type: string
+      message:
+        description: ''
+        type: string
+      created_at:
+        description: ''
+        type: string
+        format: date-time
+      closed_at:
+        description: ''
+        type: string
+        format: date-time
+      payload:
+        description: ''
+        type: object
+        additionalProperties:
+          type: object
+      links:
+        $ref: '#/definitions/EventLinksResponse'
+  Event:
+    title: Event
+    type: object
+    properties:
+      event:
+        $ref: '#/definitions/EventBody'
+  EventBody:
+    title: EventBody
+    type: object
+    properties:
+      type:
+        description: ''
+        type: string
+      level:
+        description: ''
+        type: string
+      message:
+        description: ''
+        type: string
+      created_at:
+        description: ''
+        type: string
+        format: date-time
+      closed_at:
+        description: ''
+        type: string
+        format: date-time
+      payload:
+        description: ''
+        type: object
+        additionalProperties:
+          type: object
+  EventLinksResponse:
+    title: EventLinksResponse
+    type: object
+    properties:
+      incidents:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      downtime:
+        description: ''
+        type: integer
+        format: int32
+  TargetDowntimeEventResponse:
+    title: TargetDowntimeEventResponse
+    type: object
+    properties:
+      downtime:
+        $ref: '#/definitions/TargetDowntimeEventResponseType'
+  TargetDowntimeEventResponseType:
+    title: TargetDowntimeEventResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      opened_at:
+        description: ''
+        type: string
+        format: date-time
+      last_failure:
+        description: ''
+        type: string
+        format: date-time
+      duration:
+        description: ''
+        type: integer
+        format: int32
+      number_of_failures:
+        description: ''
+        type: integer
+        format: int32
+      url:
+        description: ''
+        type: string
+      ip_address:
+        description: ''
+        type: string
+  ApplicationHostResponse:
+    title: ApplicationHostResponse
+    type: object
+    properties:
+      application_host:
+        $ref: '#/definitions/ApplicationHostResponseType'
+  ApplicationHostResponseType:
+    title: ApplicationHostResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      application_name:
+        description: ''
+        type: string
+      host:
+        description: ''
+        type: string
+      language:
+        description: ''
+        type: integer
+        format: int32
+      health_status:
+        description: ''
+        type: string
+      application_summary:
+        $ref: '#/definitions/AppSummaryDataResponse'
+      end_user_summary:
+        $ref: '#/definitions/EndUserSummaryDataResponse'
+      links:
+        $ref: '#/definitions/ApplicationHostLinksResponse'
+  AppSummaryDataResponse:
+    title: AppSummaryDataResponse
+    type: object
+    properties:
+      response_time:
+        description: ''
+        type: number
+        format: double
+      throughput:
+        description: ''
+        type: number
+        format: double
+      error_rate:
+        description: ''
+        type: number
+        format: double
+      apdex_score:
+        description: ''
+        type: number
+        format: double
+      instance_count:
+        description: ''
+        type: integer
+        format: int32
+  EndUserSummaryDataResponse:
+    title: EndUserSummaryDataResponse
+    type: object
+    properties:
+      response_time:
+        description: ''
+        type: number
+        format: double
+      throughput:
+        description: ''
+        type: number
+        format: double
+      apdex_score:
+        description: ''
+        type: number
+        format: double
+  ApplicationHostLinksResponse:
+    title: ApplicationHostLinksResponse
+    type: object
+    properties:
+      application:
+        description: ''
+        type: integer
+        format: int32
+      application_instances:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      server:
+        description: ''
+        type: integer
+        format: int32
+  ApplicationInstanceResponse:
+    title: ApplicationInstanceResponse
+    type: object
+    properties:
+      application_instance:
+        $ref: '#/definitions/ApplicationInstanceResponseType'
+  ApplicationInstanceResponseType:
+    title: ApplicationInstanceResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      application_name:
+        description: ''
+        type: string
+      host:
+        description: ''
+        type: string
+      port:
+        description: ''
+        type: integer
+        format: int32
+      language:
+        description: ''
+        type: integer
+        format: int32
+      health_status:
+        description: ''
+        type: string
+      application_summary:
+        $ref: '#/definitions/AppSummaryDataResponse'
+      end_user_summary:
+        $ref: '#/definitions/EndUserSummaryDataResponse'
+      links:
+        $ref: '#/definitions/ApplicationInstanceLinksResponse'
+  ApplicationInstanceLinksResponse:
+    title: ApplicationInstanceLinksResponse
+    type: object
+    properties:
+      application:
+        description: ''
+        type: integer
+        format: int32
+      application_host:
+        description: ''
+        type: integer
+        format: int32
+      server:
+        description: ''
+        type: integer
+        format: int32
+  DeploymentResponse:
+    title: DeploymentResponse
+    type: object
+    properties:
+      deployment:
+        $ref: '#/definitions/DeploymentResponseType'
+  DeploymentResponseType:
+    title: DeploymentResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      revision:
+        description: ''
+        type: string
+      changelog:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      user:
+        description: ''
+        type: string
+      timestamp:
+        description: ''
+        type: string
+        format: date-time
+      links:
+        $ref: '#/definitions/DeploymentLinksResponse'
+  Deployment:
+    title: Deployment
+    type: object
+    properties:
+      deployment:
+        $ref: '#/definitions/DeploymentBody'
+  DeploymentBody:
+    title: DeploymentBody
+    type: object
+    properties:
+      revision:
+        description: ''
+        type: string
+      changelog:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      user:
+        description: ''
+        type: string
+  DeploymentLinksResponse:
+    title: DeploymentLinksResponse
+    type: object
+    properties:
+      application:
+        description: ''
+        type: integer
+        format: int32
+  MobileApplicationResponse:
+    title: MobileApplicationResponse
+    type: object
+    properties:
+      application:
+        $ref: '#/definitions/MobileApplicationResponseType'
+  MobileApplicationResponseType:
+    title: MobileApplicationResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      health_status:
+        description: ''
+        type: string
+      reporting:
+        description: ''
+        type: boolean
+      mobile_summary:
+        $ref: '#/definitions/MobileSummaryDataResponse'
+      crash_summary:
+        $ref: '#/definitions/CrashSummaryResponse'
+  MobileSummaryDataResponse:
+    title: MobileSummaryDataResponse
+    type: object
+    properties:
+      active_users:
+        description: ''
+        type: integer
+        format: int32
+      launch_count:
+        description: ''
+        type: integer
+        format: int32
+      throughput:
+        description: ''
+        type: number
+        format: double
+      response_time:
+        description: ''
+        type: number
+        format: double
+      calls_per_session:
+        description: ''
+        type: number
+        format: double
+      interaction_time:
+        description: ''
+        type: number
+        format: double
+      failed_call_rate:
+        description: ''
+        type: number
+        format: double
+      remote_error_rate:
+        description: ''
+        type: number
+        format: double
+  CrashSummaryResponse:
+    title: CrashSummaryResponse
+    type: object
+    properties:
+      supports_crash_data:
+        description: ''
+        type: boolean
+      unresolved_crash_count:
+        description: ''
+        type: integer
+        format: int32
+      crash_count:
+        description: ''
+        type: integer
+        format: int32
+      crash_rate:
+        description: ''
+        type: number
+        format: double
+  BrowserApplicationResponse:
+    title: BrowserApplicationResponse
+    type: object
+    properties:
+      browser_application:
+        $ref: '#/definitions/BrowserApplicationResponseType'
+  BrowserApplicationResponseType:
+    title: BrowserApplicationResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      browser_monitoring_key:
+        description: ''
+        type: string
+      loader_script:
+        description: ''
+        type: string
+  BrowserApplication:
+    title: BrowserApplication
+    type: object
+    properties:
+      browser_application:
+        $ref: '#/definitions/BrowserApplicationBody'
+  BrowserApplicationBody:
+    title: BrowserApplicationBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+  KeyTransactionResponse:
+    title: KeyTransactionResponse
+    type: object
+    properties:
+      key_transaction:
+        $ref: '#/definitions/KeyTransactionResponseType'
+  KeyTransactionResponseType:
+    title: KeyTransactionResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      transaction_name:
+        description: ''
+        type: string
+      health_status:
+        description: ''
+        type: string
+      reporting:
+        description: ''
+        type: boolean
+      last_reported_at:
+        description: ''
+        type: string
+        format: date-time
+      application_summary:
+        $ref: '#/definitions/AppSummaryResponse'
+      end_user_summary:
+        $ref: '#/definitions/EndUserSummaryResponse'
+      links:
+        $ref: '#/definitions/KeyTransactionLinksResponse'
+  KeyTransactionLinksResponse:
+    title: KeyTransactionLinksResponse
+    type: object
+    properties:
+      application:
+        description: Application from which this key transaction originated
+        type: integer
+        format: int32
+  ServerResponse:
+    title: ServerResponse
+    type: object
+    properties:
+      server:
+        $ref: '#/definitions/ServerResponseType'
+  ServerResponseType:
+    title: ServerResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      account_id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      host:
+        description: ''
+        type: string
+      health_status:
+        description: ''
+        type: string
+      reporting:
+        description: ''
+        type: boolean
+      last_reported_at:
+        description: ''
+        type: string
+        format: date-time
+      summary:
+        $ref: '#/definitions/ServerSummaryResponse'
+      links:
+        $ref: '#/definitions/ServerLinksResponse'
+  Server:
+    title: Server
+    type: object
+    properties:
+      server:
+        $ref: '#/definitions/ServerBody'
+  ServerBody:
+    title: ServerBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+  ServerSummaryResponse:
+    title: ServerSummaryResponse
+    type: object
+    properties:
+      cpu:
+        description: ''
+        type: number
+        format: double
+      cpu_stolen:
+        description: ''
+        type: number
+        format: double
+      disk_io:
+        description: ''
+        type: number
+        format: double
+      memory:
+        description: ''
+        type: number
+        format: double
+      memory_used:
+        description: ''
+        type: integer
+        format: int32
+      memory_total:
+        description: ''
+        type: integer
+        format: int32
+      fullest_disk:
+        description: ''
+        type: number
+        format: double
+      fullest_disk_free:
+        description: ''
+        type: integer
+        format: int32
+  ServerLinksResponse:
+    title: ServerLinksResponse
+    type: object
+    properties:
+      alert_policy:
+        description: ''
+        type: integer
+        format: int32
+  UsageDataResponse:
+    title: UsageDataResponse
+    type: object
+    properties:
+      usage_data:
+        $ref: '#/definitions/UsageDataResponseType'
+  UsageDataResponseType:
+    title: UsageDataResponseType
+    type: object
+    properties:
+      product:
+        description: ''
+        type: string
+      from:
+        description: ''
+        type: string
+      to:
+        description: ''
+        type: string
+      unit:
+        description: ''
+        type: string
+      usages:
+        description: ''
+        type: array
+        items:
+          type: string
+  UserResponse:
+    title: UserResponse
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserResponseType'
+  UserResponseType:
+    title: UserResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      first_name:
+        description: ''
+        type: string
+      last_name:
+        description: ''
+        type: string
+      email:
+        description: ''
+        type: string
+      role:
+        description: ''
+        type: string
+  RecentEventResponse:
+    title: RecentEventResponse
+    type: object
+    properties:
+      recent_event:
+        $ref: '#/definitions/RecentEventResponseType'
+  RecentEventResponseType:
+    title: RecentEventResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      event_type:
+        description: ''
+        type: string
+      product:
+        description: ''
+        type: string
+      entity_type:
+        description: ''
+        type: string
+      entity_group_id:
+        description: ''
+        type: integer
+        format: int32
+      entity_id:
+        description: ''
+        type: integer
+        format: int32
+      priority:
+        description: ''
+        type: string
+      description:
+        description: ''
+        type: string
+      timestamp:
+        description: ''
+        type: integer
+        format: int32
+      incident_id:
+        description: ''
+        type: integer
+        format: int32
+  ConditionResponse:
+    title: ConditionResponse
+    type: object
+    properties:
+      condition:
+        $ref: '#/definitions/ConditionResponseType'
+  ConditionResponseType:
+    title: ConditionResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      type:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      entities:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      metric:
+        description: ''
+        type: string
+      gc_metric:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      condition_scope:
+        description: ''
+        type: string
+      violation_close_timer:
+        description: ''
+        type: integer
+        format: int32
+      user_defined:
+        $ref: '#/definitions/UserDefinedConditionResponse'
+  Condition:
+    title: Condition
+    type: object
+    properties:
+      condition:
+        $ref: '#/definitions/ConditionBody'
+  ConditionBody:
+    title: ConditionBody
+    type: object
+    properties:
+      type:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      entities:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      metric:
+        description: ''
+        type: string
+      gc_metric:
+        description: ''
+        type: string
+      condition_scope:
+        description: ''
+        type: string
+      violation_close_timer:
+        description: ''
+        type: integer
+        format: int32
+      user_defined:
+        $ref: '#/definitions/UserDefinedConditionBody'
+  UserDefinedConditionResponse:
+    title: UserDefinedConditionResponse
+    type: object
+    properties:
+      metric:
+        description: ''
+        type: string
+      value_function:
+        description: ''
+        type: string
+  UserDefinedConditionBody:
+    title: UserDefinedConditionBody
+    type: object
+    properties:
+      metric:
+        description: ''
+        type: string
+      value_function:
+        description: ''
+        type: string
+  PluginsConditionResponse:
+    title: PluginsConditionResponse
+    type: object
+    properties:
+      plugins_condition:
+        $ref: '#/definitions/PluginsConditionResponseType'
+  PluginsConditionResponseType:
+    title: PluginsConditionResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      entities:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      metric_description:
+        description: ''
+        type: string
+      metric:
+        description: ''
+        type: string
+      value_function:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      plugin:
+        $ref: '#/definitions/PluginConditionSettingsResponse'
+  PluginsCondition:
+    title: PluginsCondition
+    type: object
+    properties:
+      plugins_condition:
+        $ref: '#/definitions/PluginsConditionBody'
+  PluginsConditionBody:
+    title: PluginsConditionBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      entities:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      metric_description:
+        description: ''
+        type: string
+      metric:
+        description: ''
+        type: string
+      value_function:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      plugin:
+        $ref: '#/definitions/PluginConditionSettingsBody'
+  PluginConditionSettingsResponse:
+    title: PluginConditionSettingsResponse
+    type: object
+    properties:
+      id:
+        description: ''
+        type: string
+      guid:
+        description: ''
+        type: string
+  PluginConditionSettingsBody:
+    title: PluginConditionSettingsBody
+    type: object
+    properties:
+      id:
+        description: ''
+        type: string
+      guid:
+        description: ''
+        type: string
+  ExternalServiceConditionResponse:
+    title: ExternalServiceConditionResponse
+    type: object
+    properties:
+      external_service_condition:
+        $ref: '#/definitions/ExternalServiceConditionResponseType'
+  ExternalServiceConditionResponseType:
+    title: ExternalServiceConditionResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      type:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      entities:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      external_service_url:
+        description: ''
+        type: string
+      metric:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+  ExternalServiceCondition:
+    title: ExternalServiceCondition
+    type: object
+    properties:
+      external_service_condition:
+        $ref: '#/definitions/ExternalServiceConditionBody'
+  ExternalServiceConditionBody:
+    title: ExternalServiceConditionBody
+    type: object
+    properties:
+      type:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      entities:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      external_service_url:
+        description: ''
+        type: string
+      metric:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+  SyntheticsConditionResponse:
+    title: SyntheticsConditionResponse
+    type: object
+    properties:
+      synthetics_condition:
+        $ref: '#/definitions/SyntheticsConditionResponseType'
+  SyntheticsConditionResponseType:
+    title: SyntheticsConditionResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      monitor_id:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+  SyntheticsCondition:
+    title: SyntheticsCondition
+    type: object
+    properties:
+      synthetics_condition:
+        $ref: '#/definitions/SyntheticsConditionBody'
+  SyntheticsConditionBody:
+    title: SyntheticsConditionBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      monitor_id:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+  NrqlConditionResponse:
+    title: NrqlConditionResponse
+    type: object
+    properties:
+      nrql_condition:
+        $ref: '#/definitions/NrqlConditionResponseType'
+  NrqlConditionResponseType:
+    title: NrqlConditionResponseType
+    type: object
+    properties:
+      type:
+        description: ''
+        type: string
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      expected_groups:
+        description: ''
+        type: integer
+        format: int32
+      ignore_overlap:
+        description: ''
+        type: boolean
+      value_function:
+        description: ''
+        type: string
+      nrql:
+        $ref: '#/definitions/NrqlResponse'
+  NrqlCondition:
+    title: NrqlCondition
+    type: object
+    properties:
+      nrql_condition:
+        $ref: '#/definitions/NrqlConditionBody'
+  NrqlConditionBody:
+    title: NrqlConditionBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      runbook_url:
+        description: ''
+        type: string
+      enabled:
+        description: ''
+        type: boolean
+      expected_groups:
+        description: ''
+        type: integer
+        format: int32
+      ignore_overlap:
+        description: ''
+        type: boolean
+      value_function:
+        description: ''
+        type: string
+      nrql:
+        $ref: '#/definitions/NrqlBody'
+  NrqlResponse:
+    title: NrqlResponse
+    type: object
+    properties:
+      query:
+        description: ''
+        type: string
+      since_value:
+        description: ''
+        type: string
+  NrqlBody:
+    title: NrqlBody
+    type: object
+    properties:
+      query:
+        description: ''
+        type: string
+      since_value:
+        description: ''
+        type: string
+  PolicyResponse:
+    title: PolicyResponse
+    type: object
+    properties:
+      policy:
+        $ref: '#/definitions/PolicyResponseType'
+  PolicyResponseType:
+    title: PolicyResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      incident_preference:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      created_at:
+        description: ''
+        type: integer
+        format: int32
+      updated_at:
+        description: ''
+        type: integer
+        format: int32
+  Policy:
+    title: Policy
+    type: object
+    properties:
+      policy:
+        $ref: '#/definitions/PolicyBody'
+  PolicyBody:
+    title: PolicyBody
+    type: object
+    properties:
+      incident_preference:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+  ChannelResponse:
+    title: ChannelResponse
+    type: object
+    properties:
+      channel:
+        $ref: '#/definitions/ChannelResponseType'
+  ChannelResponseType:
+    title: ChannelResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      type:
+        description: ''
+        type: string
+      configuration:
+        description: ''
+        type: object
+        additionalProperties:
+          type: object
+      links:
+        $ref: '#/definitions/ChannelLinksResponse'
+  Channel:
+    title: Channel
+    type: object
+    properties:
+      channel:
+        $ref: '#/definitions/ChannelBody'
+  ChannelBody:
+    title: ChannelBody
+    type: object
+    properties:
+      name:
+        description: ''
+        type: string
+      type:
+        description: ''
+        type: string
+      configuration:
+        description: ''
+        type: object
+        additionalProperties:
+          type: object
+  ChannelLinksResponse:
+    title: ChannelLinksResponse
+    type: object
+    properties:
+      policy_ids:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+  PolicyChannelsResponse:
+    title: PolicyChannelsResponse
+    type: object
+    properties:
+      policy:
+        $ref: '#/definitions/PolicyChannelsResponseType'
+  PolicyChannelsResponseType:
+    title: PolicyChannelsResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      channel_ids:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+  PolicyChannels:
+    title: PolicyChannels
+    type: object
+    properties:
+      policy:
+        $ref: '#/definitions/PolicyChannelsBody'
+  PolicyChannelsBody:
+    title: PolicyChannelsBody
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      channel_ids:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+  ViolationResponse:
+    title: ViolationResponse
+    type: object
+    properties:
+      violation:
+        $ref: '#/definitions/ViolationResponseType'
+  ViolationResponseType:
+    title: ViolationResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      label:
+        description: ''
+        type: string
+      duration:
+        description: ''
+        type: integer
+        format: int32
+      policy_name:
+        description: ''
+        type: string
+      condition_name:
+        description: ''
+        type: string
+      priority:
+        description: ''
+        type: string
+      opened_at:
+        description: ''
+        type: integer
+        format: int32
+      closed_at:
+        description: ''
+        type: integer
+        format: int32
+      entity:
+        $ref: '#/definitions/ViolationEntityResponse'
+      links:
+        $ref: '#/definitions/ViolationLinksResponse'
+  Violation:
+    title: Violation
+    type: object
+    properties:
+      violation:
+        $ref: '#/definitions/ViolationBody'
+  ViolationBody:
+    title: ViolationBody
+    type: object
+    properties:
+      label:
+        description: ''
+        type: string
+      opened_at:
+        description: ''
+        type: integer
+        format: int32
+      closed_at:
+        description: ''
+        type: integer
+        format: int32
+  ViolationEntityResponse:
+    title: ViolationEntityResponse
+    type: object
+    properties:
+      product:
+        description: ''
+        type: string
+      type:
+        description: ''
+        type: string
+      group_id:
+        description: ''
+        type: integer
+        format: int32
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+  ViolationLinksResponse:
+    title: ViolationLinksResponse
+    type: object
+    properties:
+      policy_id:
+        description: ''
+        type: integer
+        format: int32
+      condition_id:
+        description: ''
+        type: integer
+        format: int32
+      incident_id:
+        description: ''
+        type: integer
+        format: int32
+  IncidentResponse:
+    title: IncidentResponse
+    type: object
+    properties:
+      incident:
+        $ref: '#/definitions/IncidentResponseType'
+  IncidentResponseType:
+    title: IncidentResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      opened_at:
+        description: ''
+        type: integer
+        format: int32
+      closed_at:
+        description: ''
+        type: integer
+        format: int32
+      incident_preference:
+        description: ''
+        type: integer
+        format: int32
+      links:
+        $ref: '#/definitions/IncidentLinksResponse'
+  IncidentLinksResponse:
+    title: IncidentLinksResponse
+    type: object
+    properties:
+      violations:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      policy_id:
+        description: ''
+        type: integer
+        format: int32
+  PluginResponse:
+    title: PluginResponse
+    type: object
+    properties:
+      plugin:
+        $ref: '#/definitions/PluginResponseType'
+  PluginResponseType:
+    title: PluginResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      guid:
+        description: ''
+        type: string
+      publisher:
+        description: ''
+        type: string
+      component_agent_count:
+        description: ''
+        type: integer
+        format: int32
+      details:
+        $ref: '#/definitions/PluginDetailsResponse'
+      summary_metrics:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/SummaryMetricResponse'
+  PluginDetailsResponse:
+    title: PluginDetailsResponse
+    type: object
+    properties:
+      description:
+        description: ''
+        type: integer
+        format: int32
+      is_public:
+        description: ''
+        type: string
+      created_at:
+        description: ''
+        type: string
+        format: date-time
+      updated_at:
+        description: ''
+        type: string
+        format: date-time
+      last_published_at:
+        description: ''
+        type: string
+        format: date-time
+      has_unpublished_changes:
+        description: ''
+        type: boolean
+      branding_image_url:
+        description: ''
+        type: string
+      upgraded_at:
+        description: ''
+        type: string
+        format: date-time
+      short_name:
+        description: ''
+        type: string
+      publisher_about_url:
+        description: ''
+        type: string
+      publisher_support_url:
+        description: ''
+        type: string
+      download_url:
+        description: ''
+        type: string
+      first_edited_at:
+        description: ''
+        type: string
+        format: date-time
+      last_edited_at:
+        description: ''
+        type: string
+        format: date-time
+      first_published_at:
+        description: ''
+        type: string
+        format: date-time
+      published_version:
+        description: ''
+        type: string
+  SummaryMetricResponse:
+    title: SummaryMetricResponse
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      metric:
+        description: ''
+        type: string
+      value_function:
+        description: ''
+        type: string
+      thresholds:
+        $ref: '#/definitions/SummaryMetricThresholdResponse'
+      values:
+        $ref: '#/definitions/SummaryMetricValuesResponse'
+  SummaryMetricThresholdResponse:
+    title: SummaryMetricThresholdResponse
+    type: object
+    properties:
+      caution:
+        description: ''
+        type: number
+        format: double
+      critical:
+        description: ''
+        type: number
+        format: double
+  SummaryMetricValuesResponse:
+    title: SummaryMetricValuesResponse
+    type: object
+    properties:
+      raw:
+        description: ''
+        type: number
+        format: double
+      formatted:
+        description: ''
+        type: string
+  ComponentResponse:
+    title: ComponentResponse
+    type: object
+    properties:
+      component:
+        $ref: '#/definitions/ComponentResponseType'
+  ComponentResponseType:
+    title: ComponentResponseType
+    type: object
+    properties:
+      id:
+        description: ''
+        type: integer
+        format: int32
+      name:
+        description: ''
+        type: string
+      health_status:
+        description: ''
+        type: string
+      summary_metrics:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/SummaryMetricResponse'
+  LabelResponse:
+    title: LabelResponse
+    type: object
+    properties:
+      label:
+        $ref: '#/definitions/LabelResponseType'
+  LabelResponseType:
+    title: LabelResponseType
+    type: object
+    properties:
+      key:
+        description: ''
+        type: string
+      category:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      origins:
+        $ref: '#/definitions/LabelOriginsResponse'
+      links:
+        $ref: '#/definitions/LabelLinksResponse'
+  Label:
+    title: Label
+    type: object
+    properties:
+      label:
+        $ref: '#/definitions/LabelBody'
+  LabelBody:
+    title: LabelBody
+    type: object
+    properties:
+      category:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      links:
+        $ref: '#/definitions/LabelLinksBody'
+  LabelOriginsResponse:
+    title: LabelOriginsResponse
+    type: object
+    properties:
+      apm:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      synthetics:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      agents:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+  LabelLinksResponse:
+    title: LabelLinksResponse
+    type: object
+    properties:
+      applications:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      servers:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+  LabelLinksBody:
+    title: LabelLinksBody
+    type: object
+    properties:
+      applications:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+      servers:
+        description: ''
+        type: array
+        items:
+          type: integer
+          format: int32
+  DashboardResponse:
+    title: DashboardResponse
+    type: object
+    properties:
+      dashboard:
+        $ref: '#/definitions/DashboardResponseType'
+  DashboardResponseType:
+    title: DashboardResponseType
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      description:
+        type: string
+      icon:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+      visibility:
+        type: string
+      editable:
+        type: string
+      ui_url:
+        type: string
+      api_url:
+        type: string
+      owner_email:
+        type: string
+      metadata:
+        type: object
+        properties:
+          version:
+            type: integer
+      widgets:
+        type: array
+        items:
+          type: object
+      filter:
+        type: object
+        properties:
+          event_types:
+            type: array
+            items:
+              type: string
+          attributes:
+            type: array
+            items:
+              type: string
+  Dashboard:
+    title: Dashboard
+    type: object
+    properties:
+      dashboard:
+        $ref: '#/definitions/DashboardBody'
+  DashboardBody:
+    title: DashboardBody
+    type: object
+    properties:
+      metadata:
+        type: object
+        properties:
+          version:
+            type: integer
+      title:
+        type: string
+      icon:
+        type: string
+      visibility:
+        type: string
+      editable:
+        type: string
+      widgets:
+        type: array
+        items:
+          type: object
+      filter:
+        type: object
+        properties:
+          event_types:
+            type: array
+            items:
+              type: string
+          attributes:
+            type: array
+            items:
+              type: string

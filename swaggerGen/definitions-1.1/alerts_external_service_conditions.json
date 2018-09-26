@@ -1,0 +1,377 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No alert policy was found with the given ID"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred while trying to create the alert condition"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint allows you to create external service conditions for your alert policies.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#ext-conditions-create\" target=\"_blank\"\u003ecreating conditions for external services\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eAll fields are required except for “runbook_url”, “enabled” (defaults to false).\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#type\" target=\"_blank\"\u003etype\u003c/a\u003e: apm_external_service, mobile_external_service.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#name\" target=\"_blank\"\u003ename\u003c/a\u003e: A title for your condition.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#enabled\" target=\"_blank\"\u003eenabled\u003c/a\u003e: The status of your condition (optional).\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#entities\" target=\"_blank\"\u003eentities\u003c/a\u003e: An array of instance IDs associated with your condition.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#external_service_url\" target=\"_blank\"\u003eexternal_service_url\u003c/a\u003e: The URL of the external service. Must not include protocol (“example.com”, not “https://example.com”)\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#metric\" target=\"_blank\"\u003emetric\u003c/a\u003e: The metric field accepts parameters based on the condition \u003cb\u003etype\u003c/b\u003e selected as follows:\u003c/p\u003e\n\n\u003cp\u003e  When \u003cb\u003eapm_external_service\u003c/b\u003e: response_time_average, response_time_minimum, response_time_maximum, throughput.\u003c/p\u003e\n\n\u003cp\u003e  When \u003cb\u003emobile_external_service\u003c/b\u003e: response_time_average, response_time_minimum, response_time_maximum, throughput, network_failure_percentage, http_status_error_percentage.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#runbook_url\" target=\"_blank\"\u003erunbook_url\u003c/a\u003e: Runbook URL to display in notifications (optional).\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#terms_duration\" target=\"_blank\"\u003eterms[duration]\u003c/a\u003e (in minutes): 5, 10, 15, 30, 60, 120.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#terms_operator\" target=\"_blank\"\u003eterms[operator]\u003c/a\u003e: above, below, equal.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#terms_priority\" target=\"_blank\"\u003eterms[priority]\u003c/a\u003e: critical, warning.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#terms_threshold\" target=\"_blank\"\u003eterms[threshold]\u003c/a\u003e: Must be 0 or greater.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#terms_time_function\" target=\"_blank\"\u003eterms[time_function]\u003c/a\u003e: all, any.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts policy ID",
+              "name": "policy_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "ExternalServiceCondition",
+              "description": "Condition schema",
+              "name": "external_service_condition",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ExternalServiceConditionResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/alerts_external_service_conditions/policies/{policy_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition was found with the given ID"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred while trying to update the alert condition"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint allows you to update external service conditions for your alert policies.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee Alerts External Service Conditions \u0026gt; Create for an explanation of the field values used in this command or the online documentation on\n\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#ext-conditions-update\" target=\"_blank\"\u003eupdating conditions for external services\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID to update",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "ExternalServiceCondition",
+              "description": "Condition schema",
+              "name": "external_service_condition",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ExternalServiceConditionResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/alerts_external_service_conditions/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition was found with the given ID"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint allows you to delete external service conditions associated with your alert policy.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#ext-conditions-delete\" target=\"_blank\"\u003edeleting External services conditions\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID",
+              "name": "condition_id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ExternalServiceConditionResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/alerts_external_service_conditions/{condition_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts policy was found for the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint allows you to list the external service conditions for your alert policy.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts policy ID",
+              "name": "policy_id",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ExternalServiceConditionResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_external_service_conditions.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "ExternalServiceCondition": {
+      "properties": {
+        "external_service_condition": {
+          "type": "ExternalServiceConditionBody"
+        }
+      }
+    },
+    "ExternalServiceConditionBody": {
+      "properties": {
+        "enabled": {
+          "desc": "Whether or not the policy is active",
+          "type": "boolean",
+          "update": true
+        },
+        "entities": {
+          "desc": "The alert condition's entities",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "external_service_url": {
+          "desc": "URL of the external service",
+          "type": "string",
+          "update": true
+        },
+        "metric": {
+          "desc": "Metric type for terms",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": true
+        },
+        "terms": {
+          "items": {
+            "$ref": {
+              "duration": "string",
+              "operator": "string",
+              "priority": "string",
+              "threshold": "string",
+              "time_function": "string"
+            }
+          },
+          "type": "array",
+          "update": true
+        },
+        "type": {
+          "desc": "Condition type",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "ExternalServiceConditionResponse": {
+      "properties": {
+        "external_service_condition": {
+          "type": "ExternalServiceConditionResponseType"
+        }
+      }
+    },
+    "ExternalServiceConditionResponseType": {
+      "properties": {
+        "enabled": {
+          "desc": "Whether or not the policy is active",
+          "type": "boolean",
+          "update": true
+        },
+        "entities": {
+          "desc": "The alert condition's entities",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "external_service_url": {
+          "desc": "URL of the external service",
+          "type": "string",
+          "update": true
+        },
+        "id": {
+          "desc": "Condition ID",
+          "type": "integer"
+        },
+        "metric": {
+          "desc": "Metric type for terms",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": true
+        },
+        "terms": {
+          "items": {
+            "$ref": {
+              "duration": "string",
+              "operator": "string",
+              "priority": "string",
+              "threshold": "string",
+              "time_function": "string"
+            }
+          },
+          "type": "array",
+          "update": true
+        },
+        "type": {
+          "desc": "Condition type",
+          "type": "string",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe Alerts external service conditions resource allows you to create, update, and list conditions that monitor external services.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

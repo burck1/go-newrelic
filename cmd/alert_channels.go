@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"github.com/burck1/go-newrelic/api"
 	"github.com/imdario/mergo"
-	"github.com/paultyng/go-newrelic/api"
 	"github.com/spf13/cobra"
 )
 

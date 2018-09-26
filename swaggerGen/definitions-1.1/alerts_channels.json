@@ -1,0 +1,253 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint works with new Alerts on alerts.newrelic.com.\u003c/p\u003e\n\n\u003cp\u003eIt returns a list of the channels associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#channels-list\"\u003elisting notification channels\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ChannelResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_channels.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint works with new Alerts on alerts.newrelic.com.\u003c/p\u003e\n\n\u003cp\u003eIt creates a channel associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#channels-create\"\u003ecreating notification channels\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eChannel type configuration options:\u003c/p\u003e\n\n\u003cul\u003e\n  \u003cli\u003e\n    \u003cp\u003eEmail\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"recipients\" : \"test@google.com\",\n\"include_json_attachment\" : true\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eHipChat\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"auth_token\": \"abc123\",\n\"room_id\": \"google.com\"\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eOpsGenie\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"api_key\": \"abc123\",\n\"teams\": \"team1\",\n\"tags\": \"tag1\",\n\"recipients\": \"me@me.com\"\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eSlack\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"url\": \"http://test.com\",\n\"channel\": \"channel1\"\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eCampfire\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"subdomain\": \"mysubdomain\",\n\"token\": \"123abc\",\n\"room\": \"room1\"\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eVictorops\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"key\": \"mykey\",\n\"route_key\": \"theroute\"\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003ePagerDuty\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"service_key\": \"myservicekey\"\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eWebhook (json)\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"base_url\": \"http://test.com\",\n\"auth_username\": \"username\",\n\"auth_password\": \"password\",\n\"payload_type\": \"application/json\",\n\"payload\": {\n  \"account_id\": \"$ACCOUNT_ID\",\n  \"account_name\": \"$ACCOUNT_NAME\",\n  \"condition_id\": \"$CONDITION_ID\",\n  \"condition_name\": \"$CONDITION_NAME\",\n  \"current_state\": \"$EVENT_STATE\",\n  \"details\": \"$EVENT_DETAILS\",\n  \"event_type\": \"$EVENT_TYPE\",\n  \"incident_acknowledge_url\": \"$INCIDENT_ACKNOWLEDGE_URL\",\n  \"incident_id\": \"$INCIDENT_ID\",\n  \"incident_url\": \"$INCIDENT_URL\",\n  \"owner\": \"$EVENT_OWNER\",\n  \"policy_name\": \"$POLICY_NAME\",\n  \"policy_url\": \"$POLICY_URL\",\n  \"runbook_url\": \"$RUNBOOK_URL\",\n  \"severity\": \"$SEVERITY\",\n  \"targets\": \"$TARGETS\",\n  \"timestamp\": \"$TIMESTAMP\",\n  \"violation_chart_url\": \"$VIOLATION_CHART_URL\"\n},\n\"headers\": {\"header1\": \"test\", \"header2\": \"test\"}\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n  \u003cli\u003e\n    \u003cp\u003eWebhook (x-www-form-urlencoded)\u003c/p\u003e\n\n    \u003cp\u003e{\u003c/p\u003e\n\n    \u003cpre\u003e\u003ccode\u003e\"base_url\": \"http://test.com\",\n\"auth_username\": \"username\",\n\"auth_password\": \"password\",\n\"payload_type\": \"application/x-www-form-urlencoded\",\n\"payload\": {\n  \"account_id\": \"$ACCOUNT_ID\",\n  \"account_name\": \"$ACCOUNT_NAME\",\n  \"condition_id\": \"$CONDITION_ID\",\n  \"condition_name\": \"$CONDITION_NAME\",\n  \"current_state\": \"$EVENT_STATE\",\n  \"details\": \"$EVENT_DETAILS\",\n  \"event_type\": \"$EVENT_TYPE\",\n  \"incident_acknowledge_url\": \"$INCIDENT_ACKNOWLEDGE_URL\",\n  \"incident_id\": \"$INCIDENT_ID\",\n  \"incident_url\": \"$INCIDENT_URL\",\n  \"owner\": \"$EVENT_OWNER\",\n  \"policy_name\": \"$POLICY_NAME\",\n  \"policy_url\": \"$POLICY_URL\",\n  \"runbook_url\": \"$RUNBOOK_URL\",\n  \"severity\": \"$SEVERITY\",\n  \"targets\": \"$TARGETS\",\n  \"timestamp\": \"$TIMESTAMP\",\n  \"violation_chart_url\": \"$VIOLATION_CHART_URL\"\n},\n\"headers\": {\"header1\": \"test\", \"header2\": \"test\"}\n\u003c/code\u003e\u003c/pre\u003e\n\n    \u003cp\u003e}\u003c/p\u003e\n  \u003c/li\u003e\n\u003c/ul\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Channel",
+              "description": "channel schema",
+              "name": "channel",
+              "paramType": "body",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Policy IDs to associate with channel",
+              "name": "policy_ids",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ChannelResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/alerts_channels.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No channel was found with the given ID"
+            },
+            {
+              "code": 406,
+              "reason": "Cannot delete USER channels"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint deletes Alerts notification channels.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ccode\u003eUser\u003c/code\u003e notification channels cannot be deleted.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#channels-delete\"\u003edeleting notification channels\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Channel ID",
+              "name": "channel_id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ChannelResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/alerts_channels/{channel_id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "Channel": {
+      "properties": {
+        "channel": {
+          "type": "ChannelBody"
+        }
+      }
+    },
+    "ChannelBody": {
+      "properties": {
+        "configuration": {
+          "desc": "Channel configuration",
+          "type": "hash",
+          "update": true
+        },
+        "name": {
+          "desc": "Name of channel",
+          "type": "string",
+          "update": true
+        },
+        "type": {
+          "desc": "Type of channel",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "ChannelLinksResponse": {
+      "properties": {
+        "policy_ids": {
+          "desc": "Policies associated with this channel",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "ChannelResponse": {
+      "properties": {
+        "channel": {
+          "type": "ChannelResponseType"
+        }
+      }
+    },
+    "ChannelResponseType": {
+      "properties": {
+        "configuration": {
+          "desc": "Channel configuration",
+          "type": "hash",
+          "update": true
+        },
+        "id": {
+          "desc": "Channel unique identifier",
+          "type": "integer"
+        },
+        "links": {
+          "type": "ChannelLinksResponse"
+        },
+        "name": {
+          "desc": "Name of channel",
+          "type": "string",
+          "update": true
+        },
+        "type": {
+          "desc": "Type of channel",
+          "type": "string",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThese API endpoints work with the new Alerts on alerts.newrelic.com.\nAlerts channels identify endpoints for alert policy notifications. Currently supported types are:\u003c/p\u003e\n\n\u003cul\u003e\n  \u003cli\u003eEmail\u003c/li\u003e\n  \u003cli\u003eHipchat\u003c/li\u003e\n  \u003cli\u003ePagerDuty\u003c/li\u003e\n  \u003cli\u003eWebhook\u003c/li\u003e\n  \u003cli\u003eCampfire\u003c/li\u003e\n  \u003cli\u003eOpsGenie\u003c/li\u003e\n  \u003cli\u003eSlack\u003c/li\u003e\n  \u003cli\u003eVictorops\u003c/li\u003e\n\u003c/ul\u003e\n\n\u003cp\u003eThe alerts channels resource provides information about an account’s channels. The details\nreturned are dependent on the type of channel. The API allows for creation and querying channels.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

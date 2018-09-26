@@ -1,0 +1,402 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 406,
+              "reason": "Bad entity type"
+            },
+            {
+              "code": 422,
+              "reason": "Internal error occurred while trying to add the Alerts entity"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint allows you to list the Alerts conditions an entity is part of.\u003c/p\u003e\n\n\u003cp\u003eEntity type options (Synthetics is not yet supported):\u003c/p\u003e\n\n\u003cpre\u003e\u003ccode\u003eBrowserApplication\n\nApplication\n\nMobileApplication\n\nServer\n\nKeyTransaction\n\nPlugin\n\u003c/code\u003e\u003c/pre\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Entity ID",
+              "name": "entity_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Entity Type",
+              "name": "entity_type",
+              "paramType": "query",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ConditionResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_entity_conditions/{entity_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition found with the given ID"
+            },
+            {
+              "code": 406,
+              "reason": "Bad entity type"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred while trying to add the Alerts entity"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "add",
+          "notes": "\u003cp\u003eThis API endpoint allows you to add an entity to a specified Alerts condition.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\n\u003cbr /\u003e\n  Entity type options (Synthetics is not yet supported):\u003c/p\u003e\n\n\u003cpre\u003e\u003ccode\u003eBrowserApplication\n\nApplication\n\nMobileApplication\n\nServer\n\nKeyTransaction\n\nPlugin\n\u003c/code\u003e\u003c/pre\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Entity id to add",
+              "name": "entity_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Entity Type",
+              "name": "entity_type",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID",
+              "name": "condition_id",
+              "paramType": "query",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ConditionResponse",
+          "summary": "Add"
+        }
+      ],
+      "path": "/v2/alerts_entity_conditions/{entity_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition found with the given ID"
+            },
+            {
+              "code": 406,
+              "reason": "Bad entity type"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred while trying to remove the Alerts entity"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "remove",
+          "notes": "\u003cp\u003eThis API endpoint allows you to disassociate an entity with a specified Alerts condition.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eEntity type options (Synthetics is not yet supported):\u003c/p\u003e\n\n\u003cpre\u003e\u003ccode\u003eBrowserApplication\n\nApplication\n\nMobileApplication\n\nServer\n\nKeyTransaction\n\nPlugin\n\u003c/code\u003e\u003c/pre\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Entity id to remove",
+              "name": "entity_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Entity Type",
+              "name": "entity_type",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID",
+              "name": "condition_id",
+              "paramType": "query",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ConditionResponse",
+          "summary": "Remove"
+        }
+      ],
+      "path": "/v2/alerts_entity_conditions/{entity_id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "Condition": {
+      "properties": {
+        "condition": {
+          "type": "ConditionBody"
+        }
+      }
+    },
+    "ConditionBody": {
+      "properties": {
+        "condition_scope": {
+          "desc": "Evaluation scope: Application or application instance",
+          "feature_check": "app_instance_conditions",
+          "type": "string",
+          "update": true
+        },
+        "enabled": {
+          "desc": "Whether or not the condition is active",
+          "type": "boolean",
+          "update": true
+        },
+        "entities": {
+          "desc": "The alert condition's entities",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "gc_metric": {
+          "desc": "GC metric to evaluate",
+          "feature_check": "jvm_health_metrics",
+          "type": "string",
+          "update": true
+        },
+        "metric": {
+          "desc": "Metric type for terms",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "terms": {
+          "items": {
+            "$ref": {
+              "duration": "string",
+              "operator": "string",
+              "priority": "string",
+              "threshold": "string",
+              "time_function": "string"
+            }
+          },
+          "type": "array",
+          "update": true
+        },
+        "type": {
+          "desc": "Condition type",
+          "type": "string",
+          "update": true
+        },
+        "user_defined": {
+          "type": "UserDefinedConditionBody"
+        },
+        "violation_close_timer": {
+          "desc": "Violations close automatically after specified number of hours",
+          "feature_check": "app_instance_conditions",
+          "type": "integer",
+          "update": true
+        }
+      }
+    },
+    "ConditionResponse": {
+      "properties": {
+        "condition": {
+          "type": "ConditionResponseType"
+        }
+      }
+    },
+    "ConditionResponseType": {
+      "properties": {
+        "condition_scope": {
+          "desc": "Evaluation scope: Application or application instance",
+          "feature_check": "app_instance_conditions",
+          "type": "string",
+          "update": true
+        },
+        "enabled": {
+          "desc": "Whether or not the condition is active",
+          "type": "boolean",
+          "update": true
+        },
+        "entities": {
+          "desc": "The alert condition's entities",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "gc_metric": {
+          "desc": "GC metric to evaluate",
+          "feature_check": "jvm_health_metrics",
+          "type": "string",
+          "update": true
+        },
+        "id": {
+          "desc": "Condition ID",
+          "type": "integer"
+        },
+        "metric": {
+          "desc": "Metric type for terms",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": false
+        },
+        "terms": {
+          "items": {
+            "$ref": {
+              "duration": "string",
+              "operator": "string",
+              "priority": "string",
+              "threshold": "string",
+              "time_function": "string"
+            }
+          },
+          "type": "array",
+          "update": true
+        },
+        "type": {
+          "desc": "Condition type",
+          "type": "string",
+          "update": true
+        },
+        "user_defined": {
+          "type": "UserDefinedConditionResponse"
+        },
+        "violation_close_timer": {
+          "desc": "Violations close automatically after specified number of hours",
+          "feature_check": "app_instance_conditions",
+          "type": "integer",
+          "update": true
+        }
+      }
+    },
+    "UserDefinedConditionBody": {
+      "properties": {
+        "metric": {
+          "type": "string",
+          "update": true
+        },
+        "value_function": {
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "UserDefinedConditionResponse": {
+      "properties": {
+        "metric": {
+          "type": "string",
+          "update": true
+        },
+        "value_function": {
+          "type": "string",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe Alerts entities resource allows you to list, remove and add entities to Alerts conditions.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

@@ -1,0 +1,395 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts policy was found with the given ID"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred while trying to create the Alerts condition"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint allows you to create NRQL conditions for your Alerts policy.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eNRQL Baseline conditions are not available.\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#conditions-create\" target=\"_blank\"\u003ecreating conditions for policies\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts policy ID",
+              "name": "policy_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "NrqlCondition",
+              "description": "Condition schema",
+              "name": "nrql_condition",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "NrqlConditionResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/alerts_nrql_conditions/policies/{policy_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition was found with the given ID"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred while trying to update the Alerts condition"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint allows you to update NRQL conditions for your Alerts policy.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eNRQL Baseline conditions are not available.\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee Alerts NRQL Conditions \u0026gt; Create for an explanation of the field values.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID to update",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "NrqlCondition",
+              "description": "Condition schema",
+              "name": "nrql_condition",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "NrqlConditionResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/alerts_nrql_conditions/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition was found with the given ID"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint allows you to delete NRQL conditions for your Alerts policy.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eNRQL Baseline conditions are not available.\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID",
+              "name": "condition_id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "NrqlConditionResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/alerts_nrql_conditions/{condition_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts policy was found for the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint allows you to list the NRQL conditions for your Alerts policy.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003cstrong\u003eNRQL Baseline conditions are not available.\u003c/strong\u003e\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts policy ID",
+              "name": "policy_id",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "NrqlConditionResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_nrql_conditions.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "NrqlBody": {
+      "properties": {
+        "query": {
+          "type": "string",
+          "update": true
+        },
+        "since_value": {
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "NrqlCondition": {
+      "properties": {
+        "nrql_condition": {
+          "type": "NrqlConditionBody"
+        }
+      }
+    },
+    "NrqlConditionBody": {
+      "properties": {
+        "enabled": {
+          "desc": "Whether or not the condition is active",
+          "type": "boolean",
+          "update": true
+        },
+        "expected_groups": {
+          "desc": "Expected groups",
+          "type": "integer",
+          "update": true
+        },
+        "ignore_overlap": {
+          "desc": "Ignore overlap",
+          "type": "boolean",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "nrql": {
+          "type": "NrqlBody"
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": true
+        },
+        "terms": {
+          "items": {
+            "$ref": {
+              "duration": "string",
+              "operator": "string",
+              "priority": "string",
+              "threshold": "string",
+              "time_function": "string"
+            }
+          },
+          "type": "array",
+          "update": true
+        },
+        "value_function": {
+          "desc": "Value function",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "NrqlConditionResponse": {
+      "properties": {
+        "nrql_condition": {
+          "type": "NrqlConditionResponseType"
+        }
+      }
+    },
+    "NrqlConditionResponseType": {
+      "properties": {
+        "enabled": {
+          "desc": "Whether or not the condition is active",
+          "type": "boolean",
+          "update": true
+        },
+        "expected_groups": {
+          "desc": "Expected groups",
+          "type": "integer",
+          "update": true
+        },
+        "id": {
+          "desc": "Condition ID",
+          "type": "integer"
+        },
+        "ignore_overlap": {
+          "desc": "Ignore overlap",
+          "type": "boolean",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "nrql": {
+          "type": "NrqlResponse"
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": true
+        },
+        "terms": {
+          "items": {
+            "$ref": {
+              "duration": "string",
+              "operator": "string",
+              "priority": "string",
+              "threshold": "string",
+              "time_function": "string"
+            }
+          },
+          "type": "array",
+          "update": true
+        },
+        "type": {
+          "desc": "Type",
+          "type": "string"
+        },
+        "value_function": {
+          "desc": "Value function",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "NrqlResponse": {
+      "properties": {
+        "query": {
+          "type": "string",
+          "update": true
+        },
+        "since_value": {
+          "type": "string",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe Alerts NRQL conditions resource allows you to create, update, and list conditions that monitor NRQL queries.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

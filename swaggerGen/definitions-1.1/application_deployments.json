@@ -1,0 +1,286 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 403,
+              "reason": "Requires an Admin User's API key"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Application found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a paginated list of the deployments associated with a given application.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\"\u003eoutput pagination\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "DeploymentResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/deployments.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 403,
+              "reason": "Requires an Admin User's API key"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 400,
+              "reason": "Revision parameter required"
+            },
+            {
+              "code": 404,
+              "reason": "No Application found with the given ID"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint creates a deployment record for a given application.\nDeployment records are created with the following attributes:\u003c/p\u003e\n\n\u003cp\u003eRequired:\u003cbr /\u003e\n  - Application ID\u003cbr /\u003e\n  - Revision, such as a git SHA\u003cbr /\u003e\u003c/p\u003e\n\n\u003cp\u003eOptional:\u003cbr /\u003e\n  - Changelog \u003cbr /\u003e\n  - Description \u003cbr /\u003e\n  - User posting the deployment\u003cbr /\u003e\u003c/p\u003e\n\n\u003cp\u003eNote that the time of your deployment will be recorded as the current time in UTC.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Deployment",
+              "description": "Deployment schema",
+              "name": "deployment",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "DeploymentResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/deployments.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 403,
+              "reason": "Requires an Admin User's API key"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Deployment found with the given ID"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint deletes the specified deployment record.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Deployment ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "DeploymentResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/deployments/{id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "Deployment": {
+      "properties": {
+        "deployment": {
+          "type": "DeploymentBody"
+        }
+      }
+    },
+    "DeploymentBody": {
+      "properties": {
+        "changelog": {
+          "desc": "Changelog",
+          "type": "string",
+          "update": true
+        },
+        "description": {
+          "desc": "Text annotation",
+          "type": "string",
+          "update": true
+        },
+        "revision": {
+          "desc": "Revision number, required",
+          "type": "string",
+          "update": true
+        },
+        "user": {
+          "desc": "User or account that created deployment",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "DeploymentLinksResponse": {
+      "properties": {
+        "application": {
+          "desc": "Application ID to which this deployment belongs",
+          "type": "integer"
+        }
+      }
+    },
+    "DeploymentResponse": {
+      "properties": {
+        "deployment": {
+          "type": "DeploymentResponseType"
+        }
+      }
+    },
+    "DeploymentResponseType": {
+      "properties": {
+        "changelog": {
+          "desc": "Changelog",
+          "type": "string",
+          "update": true
+        },
+        "description": {
+          "desc": "Text annotation",
+          "type": "string",
+          "update": true
+        },
+        "id": {
+          "desc": "Deployment ID",
+          "type": "integer"
+        },
+        "links": {
+          "type": "DeploymentLinksResponse"
+        },
+        "revision": {
+          "desc": "Revision number, required",
+          "type": "string",
+          "update": true
+        },
+        "timestamp": {
+          "desc": "Timestamp of deployment, in UTC",
+          "type": "datetime"
+        },
+        "user": {
+          "desc": "User or account that created deployment",
+          "type": "string",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe deployments resource allows for querying, creating and deleting deployment records for an application.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

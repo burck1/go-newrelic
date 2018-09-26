@@ -1,0 +1,505 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\npaginated\u003c/a\u003e list of instances associated with the given application. The time range for summary data is the last 3-4 minutes.\u003c/p\u003e\n\n\u003cp\u003eApplication instances can be filtered by hostname, or the list of application instance IDs.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion and examples of\nusing \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/list-application-specific-server-host-instance-ids\" target=\"_blank\"\u003e filters \u003c/a\u003e\nand \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by server hostname",
+              "name": "filter[hostname]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "List",
+              "description": "Filter by application instance ids",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ApplicationInstanceResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/instances.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No application instance found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single application instance, identified by ID. The time range for summary data is the last 3-4 minutes.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion of\n \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Application instance ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ApplicationInstanceResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/instances/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "names",
+          "notes": "\u003cp\u003eReturn a list of known metrics and their value names for the given resource.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion\non \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e\nand for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Application Instance ID",
+              "name": "instance_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Filter metrics by name",
+              "name": "name",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index (will be deprecated)",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Cursor for next page (replacing page param)",
+              "name": "cursor",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricParserResponse",
+          "summary": "Metric Names"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/instances/{instance_id}/metrics.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "data",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of values for each of the requested metrics. The list of available metrics\ncan be returned using the Metric Name API endpoint.\u003c/p\u003e\n\n\u003cp\u003eMetric data can be filtered by a number of parameters, including multiple names and values, and by time range.\nMetric names and values will be matched intelligently in the background.\u003c/p\u003e\n\n\u003cp\u003eYou can also retrieve a summarized data point across the entire time range selected by using the summarize\nparameter.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e, \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/extracting-metric-data\" target=\"_blank\"\u003e time range\u003c/a\u003e \nrelated considerations, and for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Application ID",
+              "name": "application_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Application Instance ID",
+              "name": "instance_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metrics by name",
+              "name": "names",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metric values",
+              "name": "values",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics after this time",
+              "name": "from",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics before this time",
+              "name": "to",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Period of timeslices in seconds",
+              "name": "period",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Summarize the data",
+              "name": "summarize",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Return unformatted raw values",
+              "name": "raw",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricDataResponse",
+          "summary": "Metric Data"
+        }
+      ],
+      "path": "/v2/applications/{application_id}/instances/{instance_id}/metrics/data.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "AppSummaryDataResponse": {
+      "properties": {
+        "apdex_score": {
+          "desc": "Application Apdex score in the last 5 minutes",
+          "type": "float"
+        },
+        "error_rate": {
+          "desc": "Application error rate in the last 5 minutes",
+          "type": "float"
+        },
+        "instance_count": {
+          "desc": "Number of application instances",
+          "type": "integer"
+        },
+        "response_time": {
+          "desc": "Application average response time",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "Application throughput in the last 5 minutes",
+          "type": "float"
+        }
+      }
+    },
+    "ApplicationInstanceLinksResponse": {
+      "properties": {
+        "application": {
+          "desc": "Application to which this host belongs to",
+          "type": "integer"
+        },
+        "application_host": {
+          "desc": "Application host on which this instance is running on",
+          "type": "integer"
+        },
+        "server": {
+          "desc": "Server in which this application is running on",
+          "type": "integer"
+        }
+      }
+    },
+    "ApplicationInstanceResponse": {
+      "properties": {
+        "application_instance": {
+          "type": "ApplicationInstanceResponseType"
+        }
+      }
+    },
+    "ApplicationInstanceResponseType": {
+      "properties": {
+        "application_name": {
+          "desc": "Application name",
+          "type": "string"
+        },
+        "application_summary": {
+          "type": "AppSummaryDataResponse"
+        },
+        "end_user_summary": {
+          "type": "EndUserSummaryDataResponse"
+        },
+        "health_status": {
+          "desc": "Application code status",
+          "type": "string"
+        },
+        "host": {
+          "desc": "Hostname of the server on which this application instance is running",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Application instance unique identifier",
+          "type": "integer"
+        },
+        "language": {
+          "desc": "Application language as reported by agents",
+          "type": "integer"
+        },
+        "links": {
+          "type": "ApplicationInstanceLinksResponse"
+        },
+        "port": {
+          "desc": "Port in which application instance is running, if any",
+          "type": "integer"
+        }
+      }
+    },
+    "EndUserSummaryDataResponse": {
+      "properties": {
+        "apdex_score": {
+          "desc": "End user Apdex score in the last 5 minutes",
+          "type": "float"
+        },
+        "response_time": {
+          "desc": "End user average response time (ms)",
+          "type": "float"
+        },
+        "throughput": {
+          "desc": "End user throughput in the last 5 minutes",
+          "type": "float"
+        }
+      }
+    },
+    "MetricDataResponse": {
+      "properties": {
+        "metric_data": {
+          "type": "MetricDataResponseType"
+        }
+      }
+    },
+    "MetricDataResponseType": {
+      "properties": {
+        "from": {
+          "desc": "Find metric data that was collected after this time.",
+          "type": "time"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "MetricResponse"
+          },
+          "type": "array"
+        },
+        "metrics_found": {
+          "desc": "Requested metrics found for this time period.",
+          "type": "string"
+        },
+        "metrics_not_found": {
+          "desc": "Metrics that were requested but not found for this time period.",
+          "type": "string"
+        },
+        "to": {
+          "desc": "Find metric data that was collected before this time.",
+          "type": "time"
+        }
+      }
+    },
+    "MetricParserResponse": {
+      "properties": {
+        "metric": {
+          "type": "MetricParserResponseType"
+        }
+      }
+    },
+    "MetricParserResponseType": {
+      "properties": {
+        "name": {
+          "desc": "Name of metric collected",
+          "type": "string"
+        },
+        "values": {
+          "desc": "The name of metric values available",
+          "items": {
+            "$ref": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MetricResponse": {
+      "properties": {
+        "name": {
+          "desc": "Name of the metric.",
+          "type": "string"
+        },
+        "timeslices": {
+          "items": {
+            "$ref": "TimesliceResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "TimesliceResponse": {
+      "properties": {
+        "from": {
+          "desc": "Find data that was collected after this time.",
+          "type": "time"
+        },
+        "to": {
+          "desc": "Find data that was collected before this time.",
+          "type": "time"
+        },
+        "values": {
+          "desc": "List of values to return for each data point.",
+          "type": "hash"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe application instances resource provides general information about each specific instance of an application monitored by\nNew Relic. The data provided includes response time, apdex and throughput. It allows for querying and filtering based on\nhostname as well as retrieving information from a single appplication instance.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}
