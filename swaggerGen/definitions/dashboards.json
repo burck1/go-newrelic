@@ -114,6 +114,7 @@
             "application/json",
             "application/xml"
           ],
+          "responseClass": "DashboardResponse",
           "summary": "List"
         }
       ],
@@ -169,6 +170,7 @@
             "application/json",
             "application/xml"
           ],
+          "responseClass": "DashboardResponse",
           "summary": "Show"
         }
       ],
@@ -224,6 +226,7 @@
             "application/json",
             "application/xml"
           ],
+          "responseClass": "DashboardResponse",
           "summary": "Create"
         }
       ],
@@ -290,6 +293,7 @@
             "application/json",
             "application/xml"
           ],
+          "responseClass": "DashboardResponse",
           "summary": "Update"
         }
       ],
@@ -345,6 +349,7 @@
             "application/json",
             "application/xml"
           ],
+          "responseClass": "DashboardResponse",
           "summary": "Delete"
         }
       ],
