@@ -1,0 +1,323 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No alert policy was found with the given ID"
+            },
+            {
+              "code": 406,
+              "reason": "Bad entity type"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred while trying to create the alert condition"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint allows you to create Synthetics conditions for your alert policies.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#synthetics-conditions-create\" target=\"_blank\"\u003ecreating Synthetic conditions\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eAll fields are required except for “runbook_url”, “enabled” (defaults to false).\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#name\" target=\"_blank\"\u003ename\u003c/a\u003e: A title for your condition.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#monitor_id\" target=\"_blank\"\u003emonitor_id\u003c/a\u003e: The GUID of the Synthetics monitor to alert on.\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#runbook_url\" target=\"_blank\"\u003erunbook_url\u003c/a\u003e: Runbook URL to display in notifications (optional).\u003c/p\u003e\n\n\u003cp\u003e\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/alerts-conditions-api-field-names#enabled\" target=\"_blank\"\u003eenabled\u003c/a\u003e: The status of your condition (optional).\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts policy ID",
+              "name": "policy_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "SyntheticsCondition",
+              "description": "Condition schema",
+              "name": "synthetics_condition",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "SyntheticsConditionResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/alerts_synthetics_conditions/policies/{policy_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition was found with the given ID"
+            },
+            {
+              "code": 406,
+              "reason": "Bad entity type"
+            },
+            {
+              "code": 422,
+              "reason": "Validation error occurred while trying to update the alert condition"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint allows you to update Synthetics conditions for your alert policies.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#synthetics-conditions-update\" target=\"_blank\"\u003eupdating Synthetic conditions\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eSee Alerts Synthetics Conditions \u0026gt; Create for an explanation of the field values used in this command.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID to update",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "SyntheticsCondition",
+              "description": "Condition schema",
+              "name": "synthetics_condition",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "SyntheticsConditionResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/alerts_synthetics_conditions/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts condition was found with the given ID"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint allows you to delete Synthetics conditions associated with your alert policy.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#synthetics-conditions-delete\" target=\"_blank\"\u003edeleting Synthetic conditions\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts condition ID",
+              "name": "condition_id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "SyntheticsConditionResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/alerts_synthetics_conditions/{condition_id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Alerts policy was found for the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint allows you to list the Synthetics conditions for your alert policy.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#synthetics-conditions-list\" target=\"_blank\"\u003elisting Synthetic conditions\u003c/a\u003e\nand \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Alerts policy ID",
+              "name": "policy_id",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "SyntheticsConditionResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_synthetics_conditions.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "SyntheticsCondition": {
+      "properties": {
+        "synthetics_condition": {
+          "type": "SyntheticsConditionBody"
+        }
+      }
+    },
+    "SyntheticsConditionBody": {
+      "properties": {
+        "enabled": {
+          "desc": "Whether or not the policy is active",
+          "type": "boolean",
+          "update": true
+        },
+        "monitor_id": {
+          "desc": "Monitor ID",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "SyntheticsConditionResponse": {
+      "properties": {
+        "synthetics_condition": {
+          "type": "SyntheticsConditionResponseType"
+        }
+      }
+    },
+    "SyntheticsConditionResponseType": {
+      "properties": {
+        "enabled": {
+          "desc": "Whether or not the policy is active",
+          "type": "boolean",
+          "update": true
+        },
+        "id": {
+          "desc": "Condition ID",
+          "type": "integer"
+        },
+        "monitor_id": {
+          "desc": "Monitor ID",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name",
+          "type": "string",
+          "update": true
+        },
+        "runbook_url": {
+          "desc": "Runbook URL",
+          "type": "string",
+          "update": true
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe Alerts Synthetics conditions resource allows you to create, update, and list conditions that monitor Synthetics monitors.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

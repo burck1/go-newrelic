@@ -73,6 +73,9 @@ We will be using [APIMATIC](https://www.apimatic.io) to convert our 1.2 swagger 
 TODO: add "notes" from original 1.1 swagger docs to 2.0 docs
 
 ## [definitions.json](https://api.newrelic.com/v2/definitions.json) : 09/16/2018
+The [API Explorer](https://rpm.newrelic.com/api/explore/api/explore) provides documentation for most of New Relic's APIs. Using Chrome's dev tools to inspect the network requests on page load reveals that the page is using the [swagger.js](https://rpm.newrelic.com/explorer/lib/swagger.js) and [swagger-ui.js](https://rpm.newrelic.com/explorer/swagger-ui.js) javascript libraries to dynamically generate their API docs. Furthermore, inspection of the XHR requests being made reveals that the swagger docs are templatized and compiled before being passed to the `swagger.js` library. So, in order for us to "scrape" a single `swagger.{json|yaml}`, we will need to read their root [definitions.json](https://api.newrelic.com/v2/definitions.json) document and then gather the rest of the swagger definitions based on the `apis` objects.
+
+### [definitions.json](https://api.newrelic.com/v2/definitions.json) : 09/16/2018
 
 The `path` property of each of the `apis` objects contains a `{format}` variable. Based on the network requests seen in Chrome, this variable should always be `json`. After some testing, it looks like `xml` is supported as well, but we'll just be using `json` for this project.
 

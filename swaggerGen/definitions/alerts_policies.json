@@ -1,0 +1,296 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint works with new Alerts on alerts.newrelic.com.\u003c/p\u003e\n\n\u003cp\u003eThis API endpoint returns a list of the alert policies associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Name (must be exact match)",
+              "name": "filter[name]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PolicyResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_policies.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred while trying to create the Alerts policy"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint works with new Alerts on alerts.newrelic.com.\u003c/p\u003e\n\n\u003cp\u003eThis Alerts API endpoint creates a policy associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eRollup stategy options:\u003c/p\u003e\n\n\u003cul\u003e\n  \u003cli\u003ePER_POLICY\u003c/li\u003e\n  \u003cli\u003ePER_CONDITION\u003c/li\u003e\n  \u003cli\u003ePER_CONDITION_AND_TARGET\u003c/li\u003e\n\u003c/ul\u003e\n\n\u003cp\u003eSee our documentation for a discussion on using the REST API for\n\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#policies-create\" target=\"_blank\"\u003ecreating new policies\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Policy",
+              "description": "Policy Schema",
+              "name": "policy",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PolicyResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/alerts_policies.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "Alerts policy could not be found for updating"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred while trying to update the Alerts policy"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint updates Alerts policies associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on using the REST API for\n\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#policies-update\" target=\"_blank\"\u003eupdating policies\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Policy ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Policy",
+              "description": "Policy Schema",
+              "name": "policy",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PolicyResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/alerts_policies/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "Alerts policy could not be found for deleting"
+            },
+            {
+              "code": 422,
+              "reason": "Validation or internal error occurred"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint deletes Alerts policies associated with your New Relic account.\u003c/p\u003e\n\n\u003cp\u003eNote: \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/rest-api-key\"\u003eAdmin User’s API Key\u003c/a\u003e is required.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on using the REST API for\n\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#policies-delete\" target=\"_blank\"\u003edeleting policies\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Policy ID",
+              "name": "policy_id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "PolicyResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/alerts_policies/{policy_id}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "Policy": {
+      "properties": {
+        "policy": {
+          "type": "PolicyBody"
+        }
+      }
+    },
+    "PolicyBody": {
+      "properties": {
+        "incident_preference": {
+          "desc": "Incident preference belonging to policy",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name of policy",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "PolicyResponse": {
+      "properties": {
+        "policy": {
+          "type": "PolicyResponseType"
+        }
+      }
+    },
+    "PolicyResponseType": {
+      "properties": {
+        "created_at": {
+          "desc": "Timestamp of policy creation",
+          "type": "integer"
+        },
+        "id": {
+          "desc": "Policy unique identifier",
+          "type": "integer"
+        },
+        "incident_preference": {
+          "desc": "Incident preference belonging to policy",
+          "type": "string",
+          "update": true
+        },
+        "name": {
+          "desc": "Name of policy",
+          "type": "string",
+          "update": true
+        },
+        "updated_at": {
+          "desc": "Timestamp of policy update",
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThese API endpoints work with the new Alerts on alerts.newrelic.com.\u003c/p\u003e\n\n\u003cp\u003eAlerts policies are rules that govern New Relic notifications for your: applications, key transactions,\nand servers. Notifications are triggered based on condition values, after given number of minutes, at two\ndifferent levels:\u003c/p\u003e\n\n\u003cp\u003eThe alerts policies resource provides information about an account’s policy. It also allows for\nquerying policies.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on using the REST API with\n\u003ca href=\"https://docs.newrelic.com/docs/alerts/new-relic-alerts/rest-api-alerts/rest-api-calls-new-relic-alerts#policies\" target=\"_blank\"\u003e Alert polices\u003c/a\u003e.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

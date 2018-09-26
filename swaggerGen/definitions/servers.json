@@ -1,0 +1,623 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003epaginated\u003c/a\u003e\nlist of the Servers associated with your New Relic account. The time range for summary data is the last 2 minutes.\u003c/p\u003e\n\n\u003cp\u003eServers can be filtered by their name, hostname, or the list of server IDs.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion and examples of\nusing \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/list-application-specific-server-host-instance-ids\" target=\"_blank\"\u003efilters\u003c/a\u003e\nand \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Filter by name",
+              "name": "filter[name]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by host",
+              "name": "filter[host]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "List",
+              "description": "Filter by server IDs",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by server labels (beta)",
+              "name": "filter[labels]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Filter by reported in last 10 hours",
+              "name": "filter[reported]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ServerResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/servers.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Server found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single Server, identified by ID. The time range for summary data is the last 2 minutes.”\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on\n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/summary-data-examples-v2\" target=\"_blank\"\u003esummary data output\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Server ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ServerResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/servers/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 422,
+              "reason": "Invalid attributes were sent to update"
+            },
+            {
+              "code": 404,
+              "reason": "No Server found with the given ID"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "update",
+          "notes": "\u003cp\u003eThis API endpoint allows you to rename your server.\u003c/p\u003e\n\n\u003cp\u003eThe input is expected to be in \u003cstrong\u003eJSON or XML\u003c/strong\u003e format in the body parameter of the PUT request. The exact\nschema is defined below. Any extra parameters passed in the body \u003cstrong\u003ewill be ignored\u003c/strong\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Server ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Server",
+              "description": "New name of the server",
+              "name": "server",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ServerResponse",
+          "summary": "Update"
+        }
+      ],
+      "path": "/v2/servers/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Server found with the given ID"
+            },
+            {
+              "code": 409,
+              "reason": "Cannot delete a Server that is still reporting data."
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eThis API endpoint deletes a server and all of its reported data.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eWARNING\u003c/strong\u003e: Only servers that have stopped reporting can be deleted. This is an irreversible process which\nwill delete all reported data for this server.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Server ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ServerResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/servers/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "names",
+          "notes": "\u003cp\u003eReturn a list of known metrics and their value names for the given resource.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion\non \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e\nand for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Server ID",
+              "name": "server_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Filter metrics by name",
+              "name": "name",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index (will be deprecated)",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Cursor for next page (replacing page param)",
+              "name": "cursor",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricParserResponse",
+          "summary": "Metric Names"
+        }
+      ],
+      "path": "/v2/servers/{server_id}/metrics.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "data",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of values for each of the requested metrics. The list of available metrics\ncan be returned using the Metric Name API endpoint.\u003c/p\u003e\n\n\u003cp\u003eMetric data can be filtered by a number of parameters, including multiple names and values, and by time range.\nMetric names and values will be matched intelligently in the background.\u003c/p\u003e\n\n\u003cp\u003eYou can also retrieve a summarized data point across the entire time range selected by using the summarize\nparameter.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e, \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/extracting-metric-data\" target=\"_blank\"\u003e time range\u003c/a\u003e \nrelated considerations, and for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Server ID",
+              "name": "server_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metrics by name",
+              "name": "names",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metric values",
+              "name": "values",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics after this time",
+              "name": "from",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics before this time",
+              "name": "to",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Period of timeslices in seconds",
+              "name": "period",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Summarize the data",
+              "name": "summarize",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Return unformatted raw values",
+              "name": "raw",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricDataResponse",
+          "summary": "Metric Data"
+        }
+      ],
+      "path": "/v2/servers/{server_id}/metrics/data.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "MetricDataResponse": {
+      "properties": {
+        "metric_data": {
+          "type": "MetricDataResponseType"
+        }
+      }
+    },
+    "MetricDataResponseType": {
+      "properties": {
+        "from": {
+          "desc": "Find metric data that was collected after this time.",
+          "type": "time"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "MetricResponse"
+          },
+          "type": "array"
+        },
+        "metrics_found": {
+          "desc": "Requested metrics found for this time period.",
+          "type": "string"
+        },
+        "metrics_not_found": {
+          "desc": "Metrics that were requested but not found for this time period.",
+          "type": "string"
+        },
+        "to": {
+          "desc": "Find metric data that was collected before this time.",
+          "type": "time"
+        }
+      }
+    },
+    "MetricParserResponse": {
+      "properties": {
+        "metric": {
+          "type": "MetricParserResponseType"
+        }
+      }
+    },
+    "MetricParserResponseType": {
+      "properties": {
+        "name": {
+          "desc": "Name of metric collected",
+          "type": "string"
+        },
+        "values": {
+          "desc": "The name of metric values available",
+          "items": {
+            "$ref": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MetricResponse": {
+      "properties": {
+        "name": {
+          "desc": "Name of the metric.",
+          "type": "string"
+        },
+        "timeslices": {
+          "items": {
+            "$ref": "TimesliceResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "Server": {
+      "properties": {
+        "server": {
+          "type": "ServerBody"
+        }
+      }
+    },
+    "ServerBody": {
+      "properties": {
+        "name": {
+          "desc": "Server name",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "ServerLinksResponse": {
+      "properties": {
+        "alert_policy": {
+          "desc": "Alert policy in which this server is a member",
+          "type": "integer"
+        }
+      }
+    },
+    "ServerResponse": {
+      "properties": {
+        "server": {
+          "type": "ServerResponseType"
+        }
+      }
+    },
+    "ServerResponseType": {
+      "properties": {
+        "account_id": {
+          "desc": "Account unique identifier",
+          "type": "integer"
+        },
+        "health_status": {
+          "desc": "Server code status",
+          "type": "string"
+        },
+        "host": {
+          "desc": "Server host name",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Server unique identifier",
+          "type": "integer"
+        },
+        "last_reported_at": {
+          "desc": "The last time the server reported data",
+          "type": "time"
+        },
+        "links": {
+          "type": "ServerLinksResponse"
+        },
+        "name": {
+          "desc": "Server name",
+          "type": "string",
+          "update": true
+        },
+        "reporting": {
+          "desc": "Whether or not the server is reporting data.",
+          "type": "boolean"
+        },
+        "summary": {
+          "type": "ServerSummaryResponse"
+        }
+      }
+    },
+    "ServerSummaryResponse": {
+      "properties": {
+        "cpu": {
+          "desc": "Percentage CPU usage",
+          "type": "float"
+        },
+        "cpu_stolen": {
+          "desc": "Percentage CPU stolen",
+          "type": "float"
+        },
+        "disk_io": {
+          "desc": "Disk IO",
+          "type": "float"
+        },
+        "fullest_disk": {
+          "desc": "Percent disk usage for fullest disk",
+          "type": "float"
+        },
+        "fullest_disk_free": {
+          "desc": "Amount of free disk space for fullest disk",
+          "type": "integer"
+        },
+        "memory": {
+          "desc": "Percentage memory usage",
+          "type": "float"
+        },
+        "memory_total": {
+          "desc": "Total amount of memory reported by the server",
+          "type": "integer"
+        },
+        "memory_used": {
+          "desc": "Amount of memory used",
+          "type": "integer"
+        }
+      }
+    },
+    "TimesliceResponse": {
+      "properties": {
+        "from": {
+          "desc": "Find data that was collected after this time.",
+          "type": "time"
+        },
+        "to": {
+          "desc": "Find data that was collected before this time.",
+          "type": "time"
+        },
+        "values": {
+          "desc": "List of values to return for each data point.",
+          "type": "hash"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe servers resource provides general information about servers monitored by New Relic, including hostname, cpu,\nand memory stats. It allows querying and filtering on multiple parameters as well as retrieving information\nfor a single server. The time range for summary data is the last 2 minutes.\u003c/p\u003e\n\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

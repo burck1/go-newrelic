@@ -1,0 +1,207 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eShow a \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003epaginated\u003c/a\u003e list of all users.\u003c/p\u003e\n\n\u003cp\u003eUers can be filtered by their ids or email.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "List",
+              "description": "Filter by user IDs",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by user email",
+              "name": "filter[email]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": null,
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "UserResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/users.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No user found with the given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single user, identified by ID.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "User ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "UserResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/users/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "POST",
+          "nickname": "reset_password",
+          "notes": "\u003cp\u003eThis API endpoints reset the user password, identified by ID\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "User ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "UserResponse",
+          "summary": "Reset password"
+        }
+      ],
+      "path": "/v2/users/{id}/reset_password.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "UserResponse": {
+      "properties": {
+        "user": {
+          "type": "UserResponseType"
+        }
+      }
+    },
+    "UserResponseType": {
+      "properties": {
+        "email": {
+          "desc": "User's email address",
+          "type": "string"
+        },
+        "first_name": {
+          "desc": "User's first name",
+          "type": "string"
+        },
+        "id": {
+          "desc": "User unique identifier",
+          "type": "integer"
+        },
+        "last_name": {
+          "desc": "User's last name",
+          "type": "string"
+        },
+        "role": {
+          "desc": "User's role (user, admin, or owner)",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe users API provides general information about the users belonging to the selected account, including name,\nemail, and role.\u003c/p\u003e\n",
+  "nrExtensions": {
+    "nr_only": true
+  },
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

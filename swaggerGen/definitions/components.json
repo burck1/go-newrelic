@@ -1,0 +1,470 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of the plugin components associated with your New Relic account.\nPlugins can be filtered by their name, the list of component IDs or a plugin ID.\nSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/plugin-examples-v2/get-individual-plugin-components-v2\" target=\"_blank\"\u003e listing components\u003c/a\u003e\nand \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Filter components by name",
+              "name": "filter[name]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "List",
+              "description": "Filter components by ids",
+              "name": "filter[ids]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Filter components by the plugin",
+              "name": "filter[plugin_id]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Include component health status",
+              "name": "health_status",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ComponentResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/components.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            },
+            {
+              "code": 404,
+              "reason": "No Plugin found with given ID"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "show",
+          "notes": "\u003cp\u003eThis API endpoint returns a single component, identified by its ID.\nSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/plugin-examples-v2/get-individual-plugin-components-v2#list_component_id\" target=\"blank\"\u003elisting components by ID\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Plugin ID",
+              "name": "id",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "ComponentResponse",
+          "summary": "Show"
+        }
+      ],
+      "path": "/v2/components/{id}.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "names",
+          "notes": "\u003cp\u003eReturn a list of known metrics and their value names for the given resource.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion\non \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e output pagination\u003c/a\u003e\nand for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Component ID",
+              "name": "component_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "String",
+              "description": "Filter metrics by name",
+              "name": "name",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index (will be deprecated)",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Cursor for next page (replacing page param)",
+              "name": "cursor",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricParserResponse",
+          "summary": "Metric Names"
+        }
+      ],
+      "path": "/v2/components/{component_id}/metrics.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "data",
+          "notes": "\u003cp\u003eThis API endpoint returns a list of values for each of the requested metrics. The list of available metrics\ncan be returned using the Metric Name API endpoint.\u003c/p\u003e\n\n\u003cp\u003eMetric data can be filtered by a number of parameters, including multiple names and values, and by time range.\nMetric names and values will be matched intelligently in the background.\u003c/p\u003e\n\n\u003cp\u003eYou can also retrieve a summarized data point across the entire time range selected by using the summarize\nparameter.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e, \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/extracting-metric-data\" target=\"_blank\"\u003e time range\u003c/a\u003e \nrelated considerations, and for examples of \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/new-relic-rest-api-v2-getting-started#examples\" target=\"_blank\"\u003erequesting and using metric values\u003c/a\u003e.\u003c/p\u003e\n\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Component ID",
+              "name": "component_id",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metrics by name",
+              "name": "names",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Array",
+              "description": "Retrieve specific metric values",
+              "name": "values",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics after this time",
+              "name": "from",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Time",
+              "description": "Retrieve metrics before this time",
+              "name": "to",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Period of timeslices in seconds",
+              "name": "period",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Summarize the data",
+              "name": "summarize",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Return unformatted raw values",
+              "name": "raw",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "MetricDataResponse",
+          "summary": "Metric Data"
+        }
+      ],
+      "path": "/v2/components/{component_id}/metrics/data.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "ComponentResponse": {
+      "properties": {
+        "component": {
+          "type": "ComponentResponseType"
+        }
+      }
+    },
+    "ComponentResponseType": {
+      "properties": {
+        "health_status": {
+          "desc": "Component code status",
+          "type": "string"
+        },
+        "id": {
+          "desc": "Component unique identifier",
+          "type": "integer"
+        },
+        "name": {
+          "desc": "Component name",
+          "type": "string"
+        },
+        "summary_metrics": {
+          "items": {
+            "$ref": "SummaryMetricResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MetricDataResponse": {
+      "properties": {
+        "metric_data": {
+          "type": "MetricDataResponseType"
+        }
+      }
+    },
+    "MetricDataResponseType": {
+      "properties": {
+        "from": {
+          "desc": "Find metric data that was collected after this time.",
+          "type": "time"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "MetricResponse"
+          },
+          "type": "array"
+        },
+        "metrics_found": {
+          "desc": "Requested metrics found for this time period.",
+          "type": "string"
+        },
+        "metrics_not_found": {
+          "desc": "Metrics that were requested but not found for this time period.",
+          "type": "string"
+        },
+        "to": {
+          "desc": "Find metric data that was collected before this time.",
+          "type": "time"
+        }
+      }
+    },
+    "MetricParserResponse": {
+      "properties": {
+        "metric": {
+          "type": "MetricParserResponseType"
+        }
+      }
+    },
+    "MetricParserResponseType": {
+      "properties": {
+        "name": {
+          "desc": "Name of metric collected",
+          "type": "string"
+        },
+        "values": {
+          "desc": "The name of metric values available",
+          "items": {
+            "$ref": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "MetricResponse": {
+      "properties": {
+        "name": {
+          "desc": "Name of the metric.",
+          "type": "string"
+        },
+        "timeslices": {
+          "items": {
+            "$ref": "TimesliceResponse"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "SummaryMetricResponse": {
+      "properties": {
+        "id": {
+          "desc": "Summary metric unique identifier",
+          "type": "integer"
+        },
+        "metric": {
+          "desc": "Metric that the summary metric is based on",
+          "type": "string"
+        },
+        "name": {
+          "desc": "Summary metric name",
+          "type": "string"
+        },
+        "thresholds": {
+          "type": "SummaryMetricThresholdResponse"
+        },
+        "value_function": {
+          "desc": "The function that is applied to the metric",
+          "type": "string"
+        },
+        "values": {
+          "type": "SummaryMetricValuesResponse"
+        }
+      }
+    },
+    "SummaryMetricThresholdResponse": {
+      "properties": {
+        "caution": {
+          "desc": "Threshold for a caution alert",
+          "type": "float"
+        },
+        "critical": {
+          "desc": "Threshold for a critical alert",
+          "type": "float"
+        }
+      }
+    },
+    "SummaryMetricValuesResponse": {
+      "properties": {
+        "formatted": {
+          "desc": "Summary metric name",
+          "type": "string"
+        },
+        "raw": {
+          "desc": "Summary metric unique identifier",
+          "type": "float"
+        }
+      }
+    },
+    "TimesliceResponse": {
+      "properties": {
+        "from": {
+          "desc": "Find data that was collected after this time.",
+          "type": "time"
+        },
+        "to": {
+          "desc": "Find data that was collected before this time.",
+          "type": "time"
+        },
+        "values": {
+          "desc": "List of values to return for each data point.",
+          "type": "hash"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe components resource provides general information about New Relic Platform components, including\nname and summary metrics. It allows for querying and filtering on multiple parameters as well as\nretrieving information for a single component.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

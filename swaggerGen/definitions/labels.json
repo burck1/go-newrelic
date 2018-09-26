@@ -1,0 +1,276 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint returns a \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003epaginated\u003c/a\u003e list of the labels available for the account.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "LabelResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/labels.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "PUT",
+          "nickname": "create",
+          "notes": "\u003cp\u003eThis API endpoint will create a new label with the provided category and name.\u003c/p\u003e\n\n\u003cp\u003eInclude the application and server IDs to which the label should be applied in the corresponding arrays.\nYou may omit the “applications” OR “servers” arrays, if not needed.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on obtaining \n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/application-examples-v2/listing-your-app-id-metric-data-v2\" target=\"_blank\"\u003eapplication\u003c/a\u003e \nand \n\u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/server-examples-v2/list-your-server-id-metric-data-v2\" target=\"_blank\"\u003eserver\u003c/a\u003e IDs.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "Label",
+              "description": "Label schema",
+              "name": "label",
+              "paramType": "body",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "LabelResponse",
+          "summary": "Create"
+        }
+      ],
+      "path": "/v2/labels.{format}"
+    },
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "DELETE",
+          "nickname": "delete",
+          "notes": "\u003cp\u003eWhen applications are provided, this endpoint will remove those applications from the label.\u003c/p\u003e\n\n\u003cp\u003eWhen no applications are provided, this endpoint will remove the label.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Label key. Example: 'Language:Java'",
+              "name": "key",
+              "paramType": "path",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "LabelResponse",
+          "summary": "Delete"
+        }
+      ],
+      "path": "/v2/labels/{key}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "Label": {
+      "properties": {
+        "label": {
+          "type": "LabelBody"
+        }
+      }
+    },
+    "LabelBody": {
+      "properties": {
+        "category": {
+          "desc": "Category to which the label belongs. Example: 'Environment'",
+          "type": "string",
+          "update": true
+        },
+        "links": {
+          "type": "LabelLinksBody"
+        },
+        "name": {
+          "desc": "Name of the label. Example: 'Production'",
+          "type": "string",
+          "update": true
+        }
+      }
+    },
+    "LabelLinksBody": {
+      "properties": {
+        "applications": {
+          "desc": "List of applications associated with this label",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "servers": {
+          "desc": "List of servers associated with this label",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        }
+      }
+    },
+    "LabelLinksResponse": {
+      "properties": {
+        "applications": {
+          "desc": "List of applications associated with this label",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        },
+        "servers": {
+          "desc": "List of servers associated with this label",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array",
+          "update": true
+        }
+      }
+    },
+    "LabelOriginsResponse": {
+      "properties": {
+        "agents": {
+          "desc": "List of entities labeled from the agent configuration file",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        },
+        "apm": {
+          "desc": "List of entities labeled from the APM UI",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        },
+        "synthetics": {
+          "desc": "List of entities labeled from the Synthetics UI",
+          "items": {
+            "$ref": "integer"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "LabelResponse": {
+      "properties": {
+        "label": {
+          "type": "LabelResponseType"
+        }
+      }
+    },
+    "LabelResponseType": {
+      "properties": {
+        "category": {
+          "desc": "Category to which the label belongs. Example: 'Environment'",
+          "type": "string",
+          "update": true
+        },
+        "key": {
+          "desc": "Unique identifier. Example: 'Environment:Production'",
+          "type": "string"
+        },
+        "links": {
+          "type": "LabelLinksResponse"
+        },
+        "name": {
+          "desc": "Name of the label. Example: 'Production'",
+          "type": "string",
+          "update": true
+        },
+        "origins": {
+          "type": "LabelOriginsResponse"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe labels resource allows you to manage the properties of your applications.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

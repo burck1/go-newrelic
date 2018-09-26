@@ -1,0 +1,112 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis endpoint is deprecated as of June 12, 2018. It will be replaced with a new subscription usage API on July 10, 2018 and shut down permanently on Aug. 10, 2018. For more details, see https://discuss.newrelic.com/t/upcoming-changes-to-the-subscription-usage-experience/56453\u003c/p\u003e\n\n\u003cp\u003eShow a list of usage for a product in a given time frame.\u003c/p\u003e\n\n\u003cp\u003eNOTE: Currently you must request 1 month of data, or less, to retrieve daily usage. Requests for greater than 1 month will currently return only monthly usage.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Available: apm, browser, mobile.",
+              "name": "product",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "dataType": "Date",
+              "description": "Format: YYYY-MM-DD",
+              "name": "start_date",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Date",
+              "description": "Format: YYYY-MM-DD",
+              "name": "end_date",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "dataType": "Boolean",
+              "description": "Include subaccounts usage? (default: false)",
+              "name": "include_subaccounts",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "UsageDataResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/usages/{product}.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "UsageDataResponse": {
+      "properties": {
+        "usage_data": {
+          "type": "UsageDataResponseType"
+        }
+      }
+    },
+    "UsageDataResponseType": {
+      "properties": {
+        "from": {
+          "desc": "Start datetime of the requested query.",
+          "type": "string"
+        },
+        "product": {
+          "desc": "Identifies Product usage. Example: 'mobile'",
+          "type": "string"
+        },
+        "to": {
+          "desc": "End datetime of the requested query",
+          "type": "string"
+        },
+        "unit": {
+          "desc": "Unit in which the results are returned. Example: 'page views'",
+          "type": "string"
+        },
+        "usages": {
+          "desc": "Usage results.",
+          "type": "array"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe usages API provides the usage information for different products of the selected account and its subaccounts.\nProducts Available: APM, Browser, Mobile.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}

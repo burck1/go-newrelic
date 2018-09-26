@@ -1,0 +1,143 @@
+{
+  "apiVersion": "v2",
+  "apis": [
+    {
+      "operations": [
+        {
+          "consumes": [
+            "application/json",
+            "application/xml"
+          ],
+          "errorResponses": [
+            {
+              "code": 401,
+              "reason": "Invalid API key"
+            },
+            {
+              "code": 401,
+              "reason": "Invalid request, API key required"
+            },
+            {
+              "code": 403,
+              "reason": "New Relic API access has not been enabled"
+            },
+            {
+              "code": 500,
+              "reason": "A server error occurred, please contact \u003ca href=\"http://support.newrelic.com\"\u003eNew Relic support\u003c/a\u003e"
+            }
+          ],
+          "httpMethod": "GET",
+          "nickname": "list",
+          "notes": "\u003cp\u003eThis API endpoint allows you to list the alert events for your account.\u003c/p\u003e\n\n\u003cp\u003eAlerts events can be filter by product, target type, group ID, instance ID, and event type.\u003c/p\u003e\n\n\u003cp\u003eThe options for products are: \u003cb\u003eAPM\u003c/b\u003e, \u003cb\u003eBROWSER\u003c/b\u003e, \u003cb\u003eMOBILE\u003c/b\u003e, \u003cb\u003eSERVERS\u003c/b\u003e, \u003cb\u003ePLUGINS\u003c/b\u003e, \u003cb\u003eSYNTHETICS\u003c/b\u003e, and \u003cb\u003eALERTS\u003c/b\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe options for entity type are: \u003cb\u003eApplication\u003c/b\u003e, \u003cb\u003eServer\u003c/b\u003e, \u003cb\u003eKeyTransaction\u003c/b\u003e, \u003cb\u003ePlugin\u003c/b\u003e, \u003cb\u003eMobileApplication\u003c/b\u003e, \u003cb\u003eBrowserApplication\u003c/b\u003e, and \u003cb\u003eMonitor\u003c/b\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe options for event type are: \u003cb\u003eNOTIFICATION\u003c/b\u003e, \u003cb\u003eDEPLOYMENT\u003c/b\u003e, \u003cb\u003eVIOLATION_OPEN\u003c/b\u003e, \u003cb\u003eVIOLATION_CLOSE\u003c/b\u003e, \u003cb\u003eVIOLATION\u003c/b\u003e, and \u003cb\u003eINSTRUMENTATION\u003c/b\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe group ID option is normally the same as the entity ID (e.g. an Application group ID and entity ID will be the same), however PLUGINS have a group ID representing the PLUGIN itself, and entity IDs for all instances of that PLUGIN type.\u003c/p\u003e\n\n\u003cp\u003eSee our documentation for a discussion on \u003ca href=\"https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/pagination-api-output\" target=\"_blank\"\u003e\noutput pagination\u003c/a\u003e.\u003c/p\u003e\n",
+          "nrExtensions": {},
+          "parameters": [
+            {
+              "dataType": "String",
+              "description": "Filter by New Relic product",
+              "name": "filter[product]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by entity type",
+              "name": "filter[entity_type]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Filter by entity group ID",
+              "name": "filter[entity_group_id]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Filter by entity ID",
+              "name": "filter[entity_id]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "String",
+              "description": "Filter by event type",
+              "name": "filter[event_type]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Filter by incident id",
+              "name": "filter[incident_id]",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "dataType": "Integer",
+              "description": "Pagination index",
+              "name": "page",
+              "paramType": "query",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json",
+            "application/xml"
+          ],
+          "responseClass": "RecentEventResponse",
+          "summary": "List"
+        }
+      ],
+      "path": "/v2/alerts_events.{format}"
+    }
+  ],
+  "basePath": "https://api.newrelic.com",
+  "models": {
+    "RecentEventResponse": {
+      "properties": {
+        "recent_event": {
+          "type": "RecentEventResponseType"
+        }
+      }
+    },
+    "RecentEventResponseType": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "entity_group_id": {
+          "type": "integer"
+        },
+        "entity_id": {
+          "type": "integer"
+        },
+        "entity_type": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "incident_id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "notes": "\u003cp\u003eThe Alerts events resource provides general information about Alert events, including ID, event type, description, timestamp, entity data, and incident ID. It allow for querying and filtering on Alerts events by product, entity data, and event type.\u003c/p\u003e\n",
+  "nrExtensions": {},
+  "resourcePath": "",
+  "swaggerVersion": "1.1"
+}
