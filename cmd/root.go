@@ -5,9 +5,14 @@ import (
 	"os"
 	"strings"
 
+	"github.com/go-openapi/strfmt"
+
 	"github.com/burck1/go-newrelic/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	apiclient "github.com/burck1/go-newrelic/client"
+	httptransport "github.com/go-openapi/runtime/client"
 )
 
 var cfgFile string
@@ -83,4 +88,14 @@ func newAPIClient(cmd *cobra.Command) (api.Client, error) {
 	client := api.New(config)
 
 	return client, nil
+}
+
+func newClient(cmd *cobra.Command) *apiclient.NewRelicV2REST {
+	apiKey := viper.GetString("api-key")
+
+	transport := httptransport.New("api.newrelic.com", "/", []string{"https"})
+	transport.DefaultAuthentication = httptransport.APIKeyAuth("X-API-KEY", "header", apiKey)
+	client := apiclient.New(transport, strfmt.Default)
+
+	return client
 }
